@@ -9,6 +9,14 @@ const handleValidationErrors = require("../../utils/validation");
 const router = express.Router();
 
 const validateSignup = [
+  check("firstName")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 2 })
+    .withMessage("First name must be 2 characters or more"),
+  check("lastName")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 2 })
+    .withMessage("Last name must be 2 characters or more"),
   check("email")
     .exists({ checkFalsy: true })
     .isEmail()
@@ -27,12 +35,20 @@ const validateSignup = [
 
 // sign up
 router.post("/", validateSignup, async (req, res) => {
-  const { email, password, username } = req.body;
+  const { firstName, lastName, email, password, username } = req.body;
   const hashedPassword = bcrypt.hashSync(password);
-  const user = await User.create({ email, username, hashedPassword });
+  const user = await User.create({
+    firstName,
+    lastName,
+    email,
+    username,
+    hashedPassword,
+  });
 
   const safeUser = {
     id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
     email: user.email,
     username: user.username,
   };
