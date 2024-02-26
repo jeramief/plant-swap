@@ -13,6 +13,8 @@ const isProduction = environment === "production";
 
 const app = express();
 
+// console.log(path);
+
 // require routes
 const routes = require("./routes");
 
@@ -47,10 +49,13 @@ app.use(
 app.use(routes);
 
 // catch unhandled requests and forward to error handler
-app.use((_req, _res, next) => {
+app.use((req, _res, next) => {
   const err = new Error("The requested resource couldn't be found");
   err.title = "Resource Not Found";
-  err.errors = { message: "The requested resource couldn't be found." };
+  err.errors = {
+    route: req.path,
+    message: "The requested resource couldn't be found.",
+  };
   err.status = 404;
   next(err);
 });
