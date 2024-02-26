@@ -13,8 +13,6 @@ const isProduction = environment === "production";
 
 const app = express();
 
-// console.log(path);
-
 // require routes
 const routes = require("./routes");
 
