@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   class Group extends Model {
     static associate(models) {
       Group.belongsTo(models.User, {
-        foreignKey: "userId",
+        foreignKey: "organizerId",
+        as: "Organizer",
       });
       Group.hasMany(models.GroupImage, {
         foreignKey: "groupId",
@@ -36,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       about: {
         allowNull: false,
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
       },
       type: {
         allowNull: false,
@@ -51,6 +52,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       state: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      numMembers: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      previewImage: {
         allowNull: false,
         type: DataTypes.STRING,
       },

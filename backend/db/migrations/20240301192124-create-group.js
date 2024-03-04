@@ -24,12 +24,12 @@ module.exports = {
       },
       name: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(60),
         unique: true,
       },
       about: {
         allowNull: false,
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING,
       },
       type: {
         allowNull: false,
@@ -44,6 +44,14 @@ module.exports = {
         type: Sequelize.STRING,
       },
       state: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      numMembers: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      previewImage: {
         allowNull: false,
         type: Sequelize.STRING,
       },
