@@ -35,7 +35,7 @@ module.exports = {
       },
       type: {
         allowNull: false,
-        type: Sequelize.ENUM,
+        type: Sequelize.STRING, // ENUM("value", "otherValue"),,
       },
       capacity: {
         allowNull: false,

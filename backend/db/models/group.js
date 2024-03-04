@@ -4,9 +4,9 @@ module.exports = (sequelize, DataTypes) => {
   class Group extends Model {
     static associate(models) {
       Group.belongsTo(models.User, {
-        foreignKey: userId,
+        foreignKey: "userId",
       });
-      Group.hasMany(models.GroupImages, {
+      Group.hasMany(models.GroupImage, {
         foreignKey: "groupId",
       });
       Group.hasMany(models.Venue, {
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       type: {
         allowNull: false,
-        type: DataTypes.ENUM,
+        type: DataTypes.STRING, // ENUM("value", "otherValue"),,
       },
       private: {
         allowNull: false,

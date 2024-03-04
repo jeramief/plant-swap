@@ -13,10 +13,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: {
-            name: "Users",
-            as: "Organizer",
-          },
+          model: "Users",
+          key: "id",
+          // model: {
+          //   name: "Users",
+          //   // as: "Organizer",
+          // },
         },
         onDelete: "CASCADE",
       },
@@ -31,7 +33,7 @@ module.exports = {
       },
       type: {
         allowNull: false,
-        type: Sequelize.ENUM,
+        type: Sequelize.STRING, // ENUM("value", "otherValue"),,
       },
       private: {
         allowNull: false,

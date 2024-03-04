@@ -3,11 +3,11 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
     static associate(models) {
-      Event.hasMany(models.EventImages, {
+      Event.hasMany(models.EventImage, {
         foreignKey: "eventId",
       });
-      Event.belongsToMany(models.Users, {
-        through: models.Attendances,
+      Event.belongsToMany(models.User, {
+        through: models.Attendance,
         foreignKey: "eventId",
         otherKey: "userId",
       });
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       type: {
         allowNull: false,
-        type: DataTypes.ENUM,
+        type: DataTypes.STRING, // ENUM("value", "otherValue"),,
       },
       capacity: {
         allowNull: false,
