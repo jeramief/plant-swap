@@ -9,12 +9,7 @@ const router = express.Router();
 // get group - route /api/groups
 router.get("/", async (req, res) => {
   // find all groups stored
-  const groups = await Group.findAll({
-    include: {
-      model: User,
-      as: "Organizer",
-    },
-  });
+  const groups = await Group.findAll();
 
   // return groups as json
   return res.json({
@@ -25,10 +20,16 @@ router.get("/", async (req, res) => {
 // get current user's groups - route: /api/groups/current
 router.get("/current", requireAuth, async (req, res) => {
   const { user } = req;
+  const userGroups = await user.getGroups();
+  const groupOrganizer = await Group.findAll({
+    where: {
+      organizerId: user.id,
+    },
+  });
 
-  console.log({ userGroups: user.getGroups });
-
-  res.json();
+  res.json({
+    Groups: [...groupOrganizer, ...userGroups],
+  });
 });
 
 module.exports = router;
