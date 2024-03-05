@@ -29,16 +29,21 @@ module.exports = (sequelize, DataTypes) => {
   Group.init(
     {
       organizerId: {
-        allowNull: false,
         type: DataTypes.INTEGER,
       },
       name: {
         allowNull: false,
         type: DataTypes.STRING,
+        validate: {
+          len: [1, 60],
+        },
       },
       about: {
         allowNull: false,
         type: DataTypes.STRING,
+        validate: {
+          len: [50],
+        },
       },
       type: {
         allowNull: false,
@@ -57,11 +62,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       numMembers: {
-        allowNull: false,
         type: DataTypes.INTEGER,
       },
       previewImage: {
-        allowNull: false,
         type: DataTypes.STRING,
       },
     },

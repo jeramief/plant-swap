@@ -10,7 +10,6 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       organizerId: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "Users",
@@ -48,11 +47,11 @@ module.exports = {
         type: Sequelize.STRING,
       },
       numMembers: {
-        allowNull: false,
+        // allowNull: false,
         type: Sequelize.INTEGER,
       },
       previewImage: {
-        allowNull: false,
+        // allowNull: false,
         type: Sequelize.STRING,
       },
       createdAt: {
