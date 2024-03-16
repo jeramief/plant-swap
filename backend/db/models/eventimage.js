@@ -22,12 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       eventId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
       },
       url: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       preview: {
         type: DataTypes.BOOLEAN,

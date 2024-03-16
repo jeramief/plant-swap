@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "groupId",
+          model: "Groups",
           key: "id",
         },
       },
@@ -43,7 +43,7 @@ module.exports = {
       },
       price: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       startDate: {
         allowNull: false,
