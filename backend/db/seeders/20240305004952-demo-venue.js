@@ -16,6 +16,22 @@ const venues = [
     lat: 37.7645358,
     lng: -122.4730327,
   },
+  {
+    groupId: 2,
+    address: "634 Code Street",
+    city: "Indianapolis",
+    state: "IN",
+    lat: -37.7645358,
+    lng: 122.4730327,
+  },
+  {
+    groupId: 1,
+    address: "444 Yellow Brick Road",
+    city: "New York",
+    state: "NY",
+    lat: 34.4,
+    lng: -124.4730327,
+  },
 ];
 
 /** @type {import('sequelize-cli').Migration} */

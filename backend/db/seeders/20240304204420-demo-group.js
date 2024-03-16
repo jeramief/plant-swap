@@ -13,7 +13,6 @@ module.exports = {
     await Group.bulkCreate(
       [
         {
-          id: 1,
           organizerId: 1,
           name: "Evening Tennis on the Water",
           about:
@@ -22,8 +21,30 @@ module.exports = {
           private: true,
           city: "New York",
           state: "NY",
-          createdAt: "2021-11-19 20:39:36",
-          updatedAt: "2021-11-19 20:39:36",
+          numMembers: 10,
+          previewImage: "image url",
+        },
+        {
+          organizerId: 3,
+          name: "Car Show",
+          about:
+            "Show off your coolest ridesShow off your coolest ridesShow off your coolest rides.",
+          type: "In person",
+          private: true,
+          city: "Los Santos",
+          state: "San Andreas",
+          numMembers: 10,
+          previewImage: "image url",
+        },
+        {
+          organizerId: 1,
+          name: "Pool Party",
+          about:
+            "Pool party, nothing too specialPool party, nothing too specialPool party, nothing too special.",
+          type: "In person",
+          private: true,
+          city: "Las Venturas",
+          state: "San Andreas",
           numMembers: 10,
           previewImage: "image url",
         },
@@ -38,7 +59,9 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        name: { [Op.in]: ["Evening Tennis on the Water"] },
+        name: {
+          [Op.in]: ["Evening Tennis on the Water", "Car Show", "Pool Party"],
+        },
       },
       {}
     );

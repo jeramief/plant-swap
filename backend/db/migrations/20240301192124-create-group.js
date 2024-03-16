@@ -14,10 +14,6 @@ module.exports = {
         references: {
           model: "Users",
           key: "id",
-          // model: {
-          //   name: "Users",
-          //   // as: "Organizer",
-          // },
         },
         onDelete: "CASCADE",
       },

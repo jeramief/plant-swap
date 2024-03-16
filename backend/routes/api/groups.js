@@ -1,7 +1,7 @@
 const express = require("express");
 const { check } = require("express-validator");
 
-const { Group, Venue } = require("../../db/models");
+const { Group, Venue, User, GroupImage } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
 const handleValidationErrors = require("../../utils/validation");
 
@@ -34,9 +34,6 @@ const validateGroup = [
     .withMessage("State is required"),
   handleValidationErrors,
 ];
-
-// handle errors
-// router.use(validateGroup);
 
 // get group - route /api/groups
 router.get("/", async (req, res) => {
@@ -97,10 +94,23 @@ router.post("/", requireAuth, validateGroup, async (req, res) => {
 // get Group details by id
 router.get("/:groupId", async (req, res) => {
   const group = await Group.findByPk(req.params.groupId, {
-    include: ["GroupImages", "Organizer", "Venues"],
+    include: [
+      {
+        model: GroupImage,
+        attributes: ["id", "url", "preview"],
+      },
+      {
+        model: User,
+        as: "Organizer",
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Venue,
+        as: "MainVenues",
+        attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"],
+      },
+    ],
   });
-  //   const groupVenues = await Group.getMainVenues;
-  //   console.log(groupVenues);
 
   if (!group) {
     return res.status(404).json({
@@ -109,6 +119,47 @@ router.get("/:groupId", async (req, res) => {
   }
 
   return res.json(group);
+});
+
+// edit a group
+router.put("/:groupId", requireAuth, async (req, res) => {
+  const { user } = req;
+  const { name, about, type, private, city, state } = req.body;
+  const group = await Group.findByPk(req.params.groupId);
+
+  if (!group) {
+    return res.status(404).json({
+      message: "Group couldn't be found",
+    });
+  }
+
+  if (user.id !== group.organizerId) {
+    return res.json({
+      message: "Only the Organizer of group can manage group",
+    });
+  }
+
+  group.update({
+    name,
+    about,
+    type,
+    private,
+    city,
+    state,
+  });
+
+  res.json({
+    id: group.id,
+    organizerId: group.organizerId,
+    name: group.name,
+    about: group.about,
+    type: group.type,
+    private: group.private,
+    city: group.city,
+    state: group.state,
+    createdAt: group.createdAt,
+    updatedAt: group.updatedAt,
+  });
 });
 
 module.exports = router;

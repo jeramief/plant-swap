@@ -27,7 +27,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "groupImages";
+    options.tableName = "GroupImages";
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       url: groupImages.map((image) => image.url),
