@@ -10,12 +10,13 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       organizerId: {
+        // allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "Users",
           key: "id",
         },
-        onDelete: "CASCADE",
+        onDelete: "SET NULL",
       },
       name: {
         allowNull: false,

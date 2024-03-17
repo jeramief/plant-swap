@@ -15,6 +15,7 @@ module.exports = {
           model: "Groups",
           key: "id",
         },
+        onDelete: "SET NULL",
       },
       address: {
         type: Sequelize.STRING,

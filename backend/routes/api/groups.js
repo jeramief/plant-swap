@@ -35,6 +35,14 @@ const validateGroup = [
   handleValidationErrors,
 ];
 
+const checkForGroup = (res, group) => {
+  if (!group) {
+    return res.status(404).json({
+      message: "Group couldn't be found",
+    });
+  }
+};
+
 // get group - route /api/groups
 router.get("/", async (req, res) => {
   // find all groups stored
@@ -112,11 +120,7 @@ router.get("/:groupId", async (req, res) => {
     ],
   });
 
-  if (!group) {
-    return res.status(404).json({
-      message: "Group couldn't be found",
-    });
-  }
+  checkForGroup(res, group);
 
   return res.json(group);
 });
@@ -127,14 +131,10 @@ router.put("/:groupId", requireAuth, async (req, res) => {
   const { name, about, type, private, city, state } = req.body;
   const group = await Group.findByPk(req.params.groupId);
 
-  if (!group) {
-    return res.status(404).json({
-      message: "Group couldn't be found",
-    });
-  }
+  checkForGroup(res, group);
 
   if (user.id !== group.organizerId) {
-    return res.json({
+    return res.status(400).json({
       message: "Only the Organizer of group can manage group",
     });
   }
@@ -160,6 +160,23 @@ router.put("/:groupId", requireAuth, async (req, res) => {
     createdAt: group.createdAt,
     updatedAt: group.updatedAt,
   });
+});
+
+router.delete("/:groupId", requireAuth, async (req, res) => {
+  const { user } = req;
+  const group = await Group.findByPk(req.params.groupId);
+
+  checkForGroup(res, group);
+
+  if (user.id !== group.organizerId) {
+    return res.status(400).json({
+      message: "Only the Organizer of group can manage group",
+    });
+  }
+
+  await group.destroy();
+
+  return res.json({ message: "Successfully deleted" });
 });
 
 module.exports = router;
