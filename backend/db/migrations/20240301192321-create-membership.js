@@ -18,13 +18,13 @@ module.exports = {
         },
       },
       groupId: {
-        // allowNull: false,
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "Groups",
           key: "id",
         },
-        onDelete: "SET NULL",
+        onDelete: "CASCADE",
       },
       status: {
         allowNull: false,

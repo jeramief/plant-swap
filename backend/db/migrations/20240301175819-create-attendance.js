@@ -16,9 +16,9 @@ module.exports = {
           model: "Events",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       userId: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "Users",
