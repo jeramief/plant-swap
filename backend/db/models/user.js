@@ -2,35 +2,40 @@
 const { Model, Validator } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      User.hasMany(models.Group, {
+        foreignKey: "organizerId",
+        as: "Organizer",
+      });
+      User.belongsToMany(models.Attendance, {
+        through: models.Attendance,
+        foreignKey: "userId",
+        otherKey: "eventId",
+      });
+      User.belongsToMany(models.Group, {
+        through: models.Membership,
+        foreignKey: "userId",
+        otherKey: "groupId",
+      });
     }
   }
   User.init(
     {
       firstName: {
-        type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          len: [2, 30],
-        },
+        type: DataTypes.STRING,
       },
       lastName: {
-        type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          len: [2, 30],
-        },
+        type: DataTypes.STRING,
       },
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: {
+          name: "User already exists",
+          msg: "User with that username already exists",
+        },
         validate: {
           len: [4, 30],
           isNotEmail(value) {
