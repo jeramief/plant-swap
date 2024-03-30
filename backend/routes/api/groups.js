@@ -42,14 +42,6 @@ const validateGroup = [
   handleValidationErrors,
 ];
 
-// const checkForGroup = (res, group) => {
-//   if (!group) {
-//     return res.status(404).json({
-//       message: "Group couldn't be found",
-//     });
-//   }
-// };
-
 // get group - route /api/groups
 router.get("/", async (req, res) => {
   // find all groups stored
@@ -81,6 +73,42 @@ router.get("/current", requireAuth, async (req, res) => {
   });
 });
 
+// Get All Venues for a Group specified by its id
+router.get("/:groupId/venues", requireAuth, async (req, res) => {
+  const { user } = req;
+  const { groupId } = req.params;
+
+  let group = await Group.findByPk(groupId, {
+    include: [{ model: Venue, include: [] }],
+  });
+
+  if (!group) {
+    return res.status(404).json({
+      message: "Group couldn't be found",
+    });
+  }
+
+  if (user.id !== group.organizerId) {
+    return res.status(400).json({
+      message: "Not authorized",
+    });
+  }
+
+  group = group.toJSON();
+  console.log({ group });
+  const venues = group.Venues;
+  venues.forEach((venue) => {
+    // venue.toJSON();
+
+    delete venue.Event;
+    console.log({ venue: venue.Event });
+  });
+
+  console.log({ venues });
+
+  res.json({ Venues: group.Venues });
+});
+
 // get Group details by id
 router.get("/:groupId", async (req, res) => {
   const group = await Group.findByPk(req.params.groupId, {
@@ -104,7 +132,6 @@ router.get("/:groupId", async (req, res) => {
     ],
   });
 
-  // checkForGroup(res, group);
   if (!group) {
     return res.status(404).json({
       message: "Group couldn't be found",
@@ -151,16 +178,15 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
 
   const group = await Group.findByPk(groupId);
 
-  if (user.id !== group.organizerId) {
-    return res.status(400).json({
-      message: "Only the Organizer of group can manage group",
-    });
-  }
-
-  // checkForGroup(res, group);
   if (!group) {
     return res.status(404).json({
       message: "Group couldn't be found",
+    });
+  }
+
+  if (user.id !== group.organizerId) {
+    return res.status(400).json({
+      message: "Only the Organizer of group can manage group",
     });
   }
 
