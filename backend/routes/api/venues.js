@@ -6,6 +6,6 @@ const handleValidationErrors = require("../../utils/validation");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  res.json({ hello: "world" });
-});
+// router.post("/:groupId/venues", requireAuth, async (req, res) => {
+//   res.json({ hello: "world" });
+// });

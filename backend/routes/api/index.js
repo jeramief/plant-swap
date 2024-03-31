@@ -1,4 +1,6 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
+
 const sessionRouter = require("./session");
 const usersRouter = require("./users");
 const groupsRouter = require("./groups");
