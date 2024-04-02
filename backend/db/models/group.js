@@ -7,26 +7,26 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "organizerId",
         as: "Organizer",
       });
-      Group.hasMany(models.GroupImage, {
-        foreignKey: "groupId",
-      });
-      Group.hasMany(models.Venue, {
-        foreignKey: "groupId",
-        as: "MainVenues",
-      });
-      Group.belongsToMany(models.User, {
-        through: models.Membership,
-        foreignKey: "groupId",
-        otherKey: "userId",
-      });
-      Group.belongsToMany(models.Venue, {
-        through: models.Event,
-        foreignKey: "groupId",
-        otherKey: "venueId",
-      });
-      Group.hasMany(models.Membership, {
-        foreignKey: "groupId",
-      });
+      // Group.hasMany(models.GroupImage, {
+      //   foreignKey: "groupId",
+      // });
+      // Group.hasMany(models.Venue, {
+      //   foreignKey: "groupId",
+      //   as: "MainVenues",
+      // });
+      // Group.belongsToMany(models.User, {
+      //   through: models.Membership,
+      //   foreignKey: "groupId",
+      //   otherKey: "userId",
+      // });
+      // Group.belongsToMany(models.Venue, {
+      //   through: models.Event,
+      //   foreignKey: "groupId",
+      //   otherKey: "venueId",
+      // });
+      // Group.hasMany(models.Membership, {
+      //   foreignKey: "groupId",
+      // });
     }
   }
   Group.init(
