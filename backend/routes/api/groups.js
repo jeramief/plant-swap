@@ -1,5 +1,5 @@
 const express = require("express");
-const { check } = require("express-validator");
+// const { check } = require("express-validator");
 
 const {
   Group,
@@ -9,46 +9,9 @@ const {
   Membership,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
-const handleValidationErrors = require("../../utils/validation");
+const { validateGroup, validateVenue } = require("../../utils/validation");
 
 const router = express.Router();
-
-const validateGroup = [
-  check("name")
-    .exists({ checkFalsy: true })
-    .isLength({ max: 60 })
-    // .custom((err) => err.status(400))
-    .withMessage("Name must be 60 characters or less"),
-  check("name").trim().notEmpty().withMessage("Group name cannot be empty"),
-  check("about")
-    .exists({ checkFalsy: true })
-    .isLength({ min: 50 })
-    .withMessage("About must be 50 characters or more"),
-  check("type")
-    .exists({ checkFalsy: true })
-    .isIn(["Online", "In person"])
-    .withMessage("Type must be 'Online' or 'In person'"),
-  check("private").isBoolean().withMessage("Private must be a boolean"),
-  check("city")
-    .exists({ checkFalsy: true })
-    .trim()
-    .notEmpty()
-    .withMessage("City is required"),
-  check("state")
-    .exists({ checkFalsy: true })
-    .trim()
-    .notEmpty()
-    .withMessage("State is required"),
-  handleValidationErrors,
-];
-
-// const checkForGroup = (res, group) => {
-//   if (!group) {
-//     return res.status(404).json({
-//       message: "Group couldn't be found",
-//     });
-//   }
-// };
 
 // get group - route /api/groups
 router.get("/", async (req, res) => {
@@ -104,7 +67,6 @@ router.get("/:groupId", async (req, res) => {
     ],
   });
 
-  // checkForGroup(res, group);
   if (!group) {
     return res.status(404).json({
       message: "Group couldn't be found",
@@ -114,8 +76,37 @@ router.get("/:groupId", async (req, res) => {
   return res.json(group);
 });
 
+// Get All Venues for a Group specified by its id
+router.get("/:groupId/venues", requireAuth, async (req, res) => {
+  const { user } = req;
+  const { groupId } = req.params;
+
+  let group = await Group.findByPk(groupId, {
+    include: [{ model: Venue, include: [] }],
+  });
+
+  if (!group) {
+    return res.status(404).json({
+      message: "Group couldn't be found",
+    });
+  }
+
+  if (user.id !== group.organizerId) {
+    return res.status(400).json({
+      message: "Not authorized",
+    });
+  }
+
+  group = group.toJSON();
+  group.Venues.forEach((venue) => {
+    delete venue.Event;
+  });
+
+  res.json({ Venues: group.Venues });
+});
+
 // create a group
-router.post("/", requireAuth, validateGroup, async (req, res) => {
+router.post("/", [requireAuth, validateGroup], async (req, res) => {
   const { name, about, type, private, city, state } = req.body;
   const { user } = req;
 
@@ -151,16 +142,15 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
 
   const group = await Group.findByPk(groupId);
 
-  if (user.id !== group.organizerId) {
-    return res.status(400).json({
-      message: "Only the Organizer of group can manage group",
-    });
-  }
-
-  // checkForGroup(res, group);
   if (!group) {
     return res.status(404).json({
       message: "Group couldn't be found",
+    });
+  }
+
+  if (user.id !== group.organizerId) {
+    return res.status(400).json({
+      message: "Only the Organizer of group can manage group",
     });
   }
 
@@ -176,6 +166,54 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
     preview: newGroupImage.preview,
   });
 });
+
+// create a new Venue for a Group specified by its id
+router.post(
+  "/:groupId/venues",
+  requireAuth,
+  validateVenue,
+  async (req, res) => {
+    const { user } = req;
+    const { groupId } = req.params;
+    const { address, city, state, lat, lng } = req.body;
+
+    const group = await Group.findByPk(groupId);
+    const isCoHost = await group.getMemberships({
+      where: { userId: user.id, status: "co-host" },
+    });
+
+    if (!group) {
+      return res.status(404).json({
+        message: "Group couldn't be found",
+      });
+    }
+
+    if (user.id !== group.organizerId && !isCoHost.length) {
+      return res.status(400).json({
+        message: "Only the Organizer or co-host of the group can manage group",
+      });
+    }
+
+    const newGroupVenue = await Venue.create({
+      groupId,
+      address,
+      city,
+      state,
+      lat,
+      lng,
+    });
+
+    res.json({
+      id: newGroupVenue.id,
+      groupId: newGroupVenue.groupId,
+      address: newGroupVenue.address,
+      city: newGroupVenue.city,
+      state: newGroupVenue.state,
+      lat: newGroupVenue.lat,
+      lng: newGroupVenue.lng,
+    });
+  }
+);
 
 // edit a group
 router.put("/:groupId", requireAuth, async (req, res) => {
