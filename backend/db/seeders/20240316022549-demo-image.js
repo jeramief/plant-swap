@@ -50,9 +50,6 @@ module.exports = {
     await GroupImage.bulkCreate(groupImages, {
       validate: true,
     });
-  },
-
-  async up(queryInterface, Sequelize) {
     await EventImage.bulkCreate(eventImages, {
       validate: true,
     });
