@@ -182,8 +182,6 @@ router.post(
       where: { userId: user.id, status: "co-host" },
     });
 
-    console.log(isCoHost);
-
     if (!group) {
       return res.status(404).json({
         message: "Group couldn't be found",
