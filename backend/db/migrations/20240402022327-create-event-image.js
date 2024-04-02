@@ -12,10 +12,10 @@ module.exports = {
       eventId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: {
-          model: "Events",
-          key: "id",
-        },
+        // references: {
+        //   model: "Events",
+        //   key: "id",
+        // },
         onDelete: "CASCADE",
       },
       url: {

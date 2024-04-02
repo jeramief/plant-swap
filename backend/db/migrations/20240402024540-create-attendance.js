@@ -12,18 +12,18 @@ module.exports = {
       eventId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: {
-          model: "Events",
-          key: "id",
-        },
+        // references: {
+        //   model: "Events",
+        //   key: "id",
+        // },
         onDelete: "CASCADE",
       },
       userId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id",
-        },
+        // references: {
+        //   model: "Users",
+        //   key: "id",
+        // },
       },
       status: {
         type: Sequelize.STRING, // ENUM("value", "otherValue"),
