@@ -239,7 +239,7 @@ router.post("/", [requireAuth, validateGroup], async (req, res) => {
 });
 
 // add group image
-router.post("/:groupId/images", requireAuth, async (req, res) => {
+router.post("/:groupId/images", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { groupId } = req.params;
   const { url, preview } = req.body;
@@ -322,7 +322,7 @@ router.post(
 
     res.json({
       id: newGroupVenue.id,
-      groupId: newGroupVenue.groupId,
+      groupId: parseInt(groupId),
       address: newGroupVenue.address,
       city: newGroupVenue.city,
       state: newGroupVenue.state,
@@ -340,7 +340,6 @@ router.post(
   async (req, res, next) => {
     const { user } = req;
     let { groupId } = req.params;
-    groupId = parseInt(groupId);
     const {
       venueId,
       name,
@@ -396,12 +395,10 @@ router.post(
       endDate,
     });
 
-    console.log(newGroupEvent);
-
-    await res.json({
+    res.json({
       id: newGroupEvent.id,
-      groupId,
-      venueId: newGroupEvent.venueId,
+      groupId: parseInt(groupId),
+      venueId,
       name: newGroupEvent.name,
       type: newGroupEvent.type,
       capacity: newGroupEvent.capacity,

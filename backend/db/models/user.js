@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "organizerId",
         as: "Organizer",
       });
-      User.belongsToMany(models.Attendance, {
-        through: models.Attendance,
-        foreignKey: "userId",
-        otherKey: "eventId",
-      });
+      // User.belongsToMany(models.Attendance, {
+      //   through: models.Attendance,
+      //   foreignKey: "userId",
+      //   otherKey: "eventId",
+      // });
       User.belongsToMany(models.Group, {
         through: models.Membership,
         foreignKey: "userId",

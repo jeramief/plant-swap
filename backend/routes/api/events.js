@@ -6,6 +6,7 @@ const {
   EventImage,
   Membership,
 } = require("../../db/models");
+const { requireAuth } = require("../../utils/auth");
 
 /*-------------------------------GET-------------------------------*/
 // Get all Events
@@ -133,6 +134,52 @@ router.get("/:eventId", async (req, res, next) => {
 /*-------------------------------GET-------------------------------*/
 
 /*-------------------------------POST------------------------------*/
+
+// Add an Image to an Event based on the Event's id
+router.post("/:eventId/images", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const { eventId } = req.params;
+  const { url, preview } = req.body;
+
+  const event = await Event.findByPk(eventId);
+
+  if (!event) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Event couldn't be found";
+
+    return next(err);
+  }
+
+  const isMember = await event.getGroup({
+    attributes: [],
+    include: { model: Membership, where: { userId: user.id } },
+  });
+
+  console.log({ isMember });
+
+  if (user.id !== event.organizerId && !isMember) {
+    const err = new Error();
+    err.title = "Not Authorized";
+    err.status = 400;
+    err.message = "Needs authorization";
+
+    return next(err);
+  }
+
+  const newEventImage = await EventImage.create({
+    eventId,
+    url,
+    preview,
+  });
+
+  res.json({
+    id: newEventImage.id,
+    url: newEventImage.url,
+    preview: newEventImage.preview,
+  });
+});
 
 /*-------------------------------POST------------------------------*/
 
