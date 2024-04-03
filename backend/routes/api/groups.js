@@ -7,12 +7,15 @@ const {
   User,
   GroupImage,
   Membership,
+  Event,
+  EventImage,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
 const { validateGroup, validateVenue } = require("../../utils/validation");
 
 const router = express.Router();
 
+/*--------------------GET--------------------*/
 // get group - route /api/groups
 router.get("/", async (req, res) => {
   // find all groups stored
@@ -103,6 +106,92 @@ router.get("/:groupId/venues", requireAuth, async (req, res) => {
 
   res.json({ Venues: group.Venues });
 });
+
+// Get all Events of a Group specified by its id
+router.get("/:groupId/events", async (req, res, next) => {
+  const { groupId } = req.params;
+
+  const eventsArr = [];
+
+  const groupEvents = await Group.findByPk(groupId, {
+    attributes: [],
+    include: {
+      model: Event,
+      attributes: [
+        "id",
+        "groupId",
+        "venueId",
+        "name",
+        "type",
+        "startDate",
+        "endDate",
+      ],
+      include: [
+        {
+          model: Group,
+          attributes: ["id", "name", "city", "state"],
+        },
+        {
+          model: Venue,
+          attributes: ["id", "city", "state"],
+        },
+      ],
+    },
+  });
+
+  if (!groupEvents) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
+  }
+
+  for (const event of groupEvents.Events) {
+    const imageUrl = await EventImage.findOne({
+      where: {
+        eventId: event.id,
+      },
+      attributes: ["url"],
+    });
+    const numAttending = await Group.count({
+      include: {
+        model: Membership,
+        where: {
+          groupId: event.groupId,
+        },
+      },
+    });
+
+    if (!imageUrl) {
+      event.dataValues.previewImage = null;
+    } else {
+      event.previewImage = imageUrl.url;
+    }
+
+    const payload = {
+      id: event.id,
+      groupId: event.groupId,
+      venueId: event.venueId,
+      name: event.name,
+      type: event.type,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      numAttending,
+      previewImage: event.previewImage,
+      Group: event.Group,
+      Venue: event.Venue,
+    };
+
+    eventsArr.push(payload);
+  }
+
+  return res.json({ Events: eventsArr });
+});
+/*--------------------GET--------------------*/
+
+/*--------------------POST-------------------*/
 
 // create a group
 router.post("/", [requireAuth, validateGroup], async (req, res) => {
@@ -215,16 +304,19 @@ router.post(
 );
 
 // edit a group
-router.put("/:groupId", requireAuth, async (req, res) => {
+router.put("/:groupId", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { name, about, type, private, city, state } = req.body;
   const group = await Group.findByPk(req.params.groupId);
 
   // checkForGroup(res, group);
   if (!group) {
-    return res.status(404).json({
-      message: "Group couldn't be found",
-    });
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
   }
 
   if (user.id !== group.organizerId) {
@@ -256,15 +348,18 @@ router.put("/:groupId", requireAuth, async (req, res) => {
   });
 });
 
-router.delete("/:groupId", requireAuth, async (req, res) => {
+router.delete("/:groupId", requireAuth, async (req, res, next) => {
   const { user } = req;
   const group = await Group.findByPk(req.params.groupId);
 
   // checkForGroup(res, group);
   if (!group) {
-    return res.status(404).json({
-      message: "Group couldn't be found",
-    });
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
   }
 
   if (user.id !== group.organizerId) {
