@@ -60,7 +60,6 @@ router.get("/:groupId", async (req, res) => {
       },
       {
         model: Venue,
-        // as: "MainVenues",
         attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"],
         attributes: { exclude: ["Event"] },
       },
