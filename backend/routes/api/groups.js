@@ -15,7 +15,8 @@ const { validateGroup, validateVenue } = require("../../utils/validation");
 
 const router = express.Router();
 
-/*--------------------GET--------------------*/
+/*-------------------------------GET-------------------------------*/
+
 // get group - route /api/groups
 router.get("/", async (req, res) => {
   // find all groups stored
@@ -189,9 +190,9 @@ router.get("/:groupId/events", async (req, res, next) => {
 
   return res.json({ Events: eventsArr });
 });
-/*--------------------GET--------------------*/
+/*-------------------------------GET-------------------------------*/
 
-/*--------------------POST-------------------*/
+/*-------------------------------POST------------------------------*/
 
 // create a group
 router.post("/", [requireAuth, validateGroup], async (req, res) => {
@@ -303,6 +304,10 @@ router.post(
   }
 );
 
+/*-------------------------------POST------------------------------*/
+
+/*-------------------------------PUT-------------------------------*/
+
 // edit a group
 router.put("/:groupId", requireAuth, async (req, res, next) => {
   const { user } = req;
@@ -348,6 +353,10 @@ router.put("/:groupId", requireAuth, async (req, res, next) => {
   });
 });
 
+/*-------------------------------PUT-------------------------------*/
+
+/*-------------------------------DELETE----------------------------*/
+
 router.delete("/:groupId", requireAuth, async (req, res, next) => {
   const { user } = req;
   const group = await Group.findByPk(req.params.groupId);
@@ -372,5 +381,7 @@ router.delete("/:groupId", requireAuth, async (req, res, next) => {
 
   return res.json({ message: "Successfully deleted" });
 });
+
+/*-------------------------------DELETE----------------------------*/
 
 module.exports = router;

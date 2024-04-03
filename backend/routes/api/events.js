@@ -9,6 +9,8 @@ const {
   sequelize,
 } = require("../../db/models");
 
+/*-------------------------------GET-------------------------------*/
+// Get all Events
 router.get("/", async (req, res) => {
   const eventsArr = [];
 
@@ -75,5 +77,65 @@ router.get("/", async (req, res) => {
 
   return res.json({ Events: eventsArr });
 });
+
+// Get details of an Event specified by its id
+router.get("/:eventId", async (req, res, next) => {
+  const { eventId } = req.params;
+
+  const event = await Event.findByPk(eventId, {
+    attributes: [
+      "id",
+      "groupId",
+      "venueId",
+      "name",
+      "description",
+      "type",
+      "capacity",
+      "price",
+      "startDate",
+      "endDate",
+    ],
+    include: [
+      {
+        model: Group,
+        attributes: ["id", "name", "city", "state"],
+      },
+      {
+        model: Venue,
+        attributes: ["id", "city", "state"],
+      },
+      // {
+      //   model: "EventImages",
+      //   attributes: ["id", "url", "preview"],
+      // },
+    ],
+  });
+
+  if (!event) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Event couldn't be found";
+
+    return next(err);
+  }
+
+  const eventImages = await event.getEventImages();
+  const numAttending = await Group.count({
+    include: {
+      model: Membership,
+      where: {
+        groupId: event.groupId,
+      },
+    },
+  });
+
+  res.json({ event: { event, EventImages: eventImages, numAttending } });
+});
+/*-------------------------------GET-------------------------------*/
+
+/*-------------------------------POST------------------------------*/
+
+/*-------------------------------POST------------------------------*/
 
 module.exports = router;
