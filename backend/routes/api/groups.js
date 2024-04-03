@@ -11,7 +11,11 @@ const {
   EventImage,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
-const { validateGroup, validateVenue } = require("../../utils/validation");
+const {
+  validateGroup,
+  validateVenue,
+  validateEvent,
+} = require("../../utils/validation");
 
 const router = express.Router();
 
@@ -71,9 +75,12 @@ router.get("/:groupId", async (req, res) => {
   });
 
   if (!group) {
-    return res.status(404).json({
-      message: "Group couldn't be found",
-    });
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
   }
 
   return res.json(group);
@@ -87,17 +94,25 @@ router.get("/:groupId/venues", requireAuth, async (req, res) => {
   let group = await Group.findByPk(groupId, {
     include: [{ model: Venue, include: [] }],
   });
+  const isCoHost = await group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
 
   if (!group) {
-    return res.status(404).json({
-      message: "Group couldn't be found",
-    });
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
   }
 
-  if (user.id !== group.organizerId) {
-    return res.status(400).json({
-      message: "Not authorized",
-    });
+  if (user.id !== group.organizerId && !isCoHost.length) {
+    const err = new Error();
+    err.status = 400;
+    err.message = "Not Authorized";
+
+    return next(err);
   }
 
   group = group.toJSON();
@@ -230,17 +245,25 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
   const { url, preview } = req.body;
 
   const group = await Group.findByPk(groupId);
+  const isCoHost = await group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
 
   if (!group) {
-    return res.status(404).json({
-      message: "Group couldn't be found",
-    });
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
   }
 
-  if (user.id !== group.organizerId) {
-    return res.status(400).json({
-      message: "Only the Organizer of group can manage group",
-    });
+  if (user.id !== group.organizerId && !isCoHost.length) {
+    const err = new Error();
+    err.status = 400;
+    err.message = "Not Authorized";
+
+    return next(err);
   }
 
   const newGroupImage = await GroupImage.create({
@@ -272,15 +295,20 @@ router.post(
     });
 
     if (!group) {
-      return res.status(404).json({
-        message: "Group couldn't be found",
-      });
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Group couldn't be found";
+
+      return next(err);
     }
 
     if (user.id !== group.organizerId && !isCoHost.length) {
-      return res.status(400).json({
-        message: "Only the Organizer or co-host of the group can manage group",
-      });
+      const err = new Error();
+      err.status = 400;
+      err.message = "Not Authorized";
+
+      return next(err);
     }
 
     const newGroupVenue = await Venue.create({
@@ -304,6 +332,87 @@ router.post(
   }
 );
 
+// Create an Event for a Group specified by its id
+router.post(
+  "/:groupId/events",
+  requireAuth,
+  validateEvent,
+  async (req, res, next) => {
+    const { user } = req;
+    let { groupId } = req.params;
+    groupId = parseInt(groupId);
+    const {
+      venueId,
+      name,
+      type,
+      capacity,
+      price,
+      description,
+      startDate,
+      endDate,
+    } = req.body;
+
+    const group = await Group.findByPk(groupId);
+    const venue = await Venue.findByPk(venueId);
+
+    if (!group) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Group couldn't be found";
+
+      return next(err);
+    }
+    if (!venue) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Venue couldn't be found";
+
+      return next(err);
+    }
+
+    const isCoHost = await group.getMemberships({
+      where: { userId: user.id, status: "co-host" },
+    });
+
+    if (user.id !== group.organizerId && !isCoHost.length) {
+      const err = new Error();
+      err.status = 400;
+      err.message = "Not Authorized";
+
+      return next(err);
+    }
+
+    const newGroupEvent = await Event.create({
+      groupId,
+      venueId,
+      name,
+      type,
+      capacity,
+      price,
+      description,
+      startDate,
+      endDate,
+    });
+
+    console.log(newGroupEvent);
+
+    await res.json({
+      id: newGroupEvent.id,
+      groupId,
+      venueId: newGroupEvent.venueId,
+      name: newGroupEvent.name,
+      type: newGroupEvent.type,
+      capacity: newGroupEvent.capacity,
+      price: newGroupEvent.price,
+      description: newGroupEvent.description,
+      startDate: newGroupEvent.startDate,
+      endDate: newGroupEvent.endDate,
+    });
+  }
+);
+
 /*-------------------------------POST------------------------------*/
 
 /*-------------------------------PUT-------------------------------*/
@@ -312,7 +421,11 @@ router.post(
 router.put("/:groupId", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { name, about, type, private, city, state } = req.body;
+
   const group = await Group.findByPk(req.params.groupId);
+  const isCoHost = await group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
 
   // checkForGroup(res, group);
   if (!group) {
@@ -324,10 +437,12 @@ router.put("/:groupId", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
-  if (user.id !== group.organizerId) {
-    return res.status(400).json({
-      message: "Only the Organizer of group can manage group",
-    });
+  if (user.id !== group.organizerId && !isCoHost.length) {
+    const err = new Error();
+    err.status = 400;
+    err.message = "Not Authorized";
+
+    return next(err);
   }
 
   group.update({
@@ -359,7 +474,11 @@ router.put("/:groupId", requireAuth, async (req, res, next) => {
 
 router.delete("/:groupId", requireAuth, async (req, res, next) => {
   const { user } = req;
+
   const group = await Group.findByPk(req.params.groupId);
+  const isCoHost = await group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
 
   // checkForGroup(res, group);
   if (!group) {
@@ -371,10 +490,12 @@ router.delete("/:groupId", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
-  if (user.id !== group.organizerId) {
-    return res.status(400).json({
-      message: "Only the Organizer of group can manage group",
-    });
+  if (user.id !== group.organizerId && !isCoHost.length) {
+    const err = new Error();
+    err.status = 400;
+    err.message = "Not Authorized";
+
+    return next(err);
   }
 
   await group.destroy();

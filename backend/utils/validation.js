@@ -114,9 +114,46 @@ const validateVenue = [
   handleValidationErrors,
 ];
 
+const validateEvent = [
+  check("name")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isLength({ min: 5, max: 40 })
+    .withMessage("Name must be at least 5 characters"),
+  check("type")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isIn("Online", "In Person")
+    .withMessage("Type must be Online or In person"),
+  check("capacity")
+    .isInt({ min: 1 })
+    .withMessage("Capacity must be an integer"),
+  check("price")
+    .exists({ checkFalsy: true })
+    .isFloat()
+    .withMessage("Price is invalid"),
+  check("description")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isLength({ min: 5 })
+    .withMessage("Description is required"),
+  check("startDate")
+    .exists({ checkFalsy: true })
+    .toDate()
+    .isAfter("2021-11-19 10:00:00")
+    .withMessage("Start date must be in the future"),
+  check("endDate")
+    .exists({ checkFalsy: true })
+    .toDate()
+    .isAfter("2021-11-19 21:00:00")
+    .withMessage("End date is less than start date"),
+  handleValidationErrors,
+];
+
 module.exports = {
   validateSignup,
   validateLogin,
   validateGroup,
   validateVenue,
+  validateEvent,
 };

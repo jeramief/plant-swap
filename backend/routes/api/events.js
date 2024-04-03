@@ -3,10 +3,8 @@ const {
   Event,
   Group,
   Venue,
-  User,
   EventImage,
   Membership,
-  sequelize,
 } = require("../../db/models");
 
 /*-------------------------------GET-------------------------------*/
