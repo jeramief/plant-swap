@@ -150,10 +150,18 @@ const validateEvent = [
   handleValidationErrors,
 ];
 
+const validateMembership = [
+  check("status")
+    .isIn(["member", "co-host"])
+    .withMessage("Cannot change a membership status to pending"),
+  handleValidationErrors,
+];
+
 module.exports = {
   validateSignup,
   validateLogin,
   validateGroup,
   validateVenue,
   validateEvent,
+  validateMembership,
 };

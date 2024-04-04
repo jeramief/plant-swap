@@ -15,6 +15,7 @@ const {
   validateGroup,
   validateVenue,
   validateEvent,
+  validateMembership,
 } = require("../../utils/validation");
 
 const router = express.Router();
@@ -526,9 +527,6 @@ router.put("/:groupId", requireAuth, async (req, res, next) => {
   const { name, about, type, private, city, state } = req.body;
 
   const group = await Group.findByPk(req.params.groupId);
-  const isCoHost = await group.getMemberships({
-    where: { userId: user.id, status: "co-host" },
-  });
 
   // checkForGroup(res, group);
   if (!group) {
@@ -540,7 +538,12 @@ router.put("/:groupId", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
+  const isCoHost = await group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
+
   if (user.id !== group.organizerId && !isCoHost.length) {
+    const err = new Error();
     err.title = "Forbidden";
     err.status = 403;
     err.message = "Forbiden";
@@ -570,6 +573,68 @@ router.put("/:groupId", requireAuth, async (req, res, next) => {
     updatedAt: group.updatedAt,
   });
 });
+
+// Change the status of a membership for a group specified by id
+router.put(
+  "/:groupId/membership",
+  requireAuth,
+  validateMembership,
+  async (req, res, next) => {
+    const { user } = req;
+    const { groupId } = req.params;
+    const { memberId, status } = req.body;
+
+    const group = await Group.findByPk(groupId);
+
+    if (!group) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Group couldn't be found";
+
+      return next(err);
+    }
+
+    const isUser = await User.findByPk(memberId);
+    const isCoHost = await group.getMemberships({
+      where: { userId: user.id, status: "co-host" },
+    });
+    const isMember = await group.getMemberships({
+      where: { userId: memberId },
+    });
+
+    if (user.id !== group.organizerId && !isCoHost.length) {
+      const err = new Error();
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
+
+      return next(err);
+    }
+    if (!isUser) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "User couldn't be found";
+
+      return next(err);
+    }
+    if (!isMember.length) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Membership between the user and the group does not exist";
+
+      return next(err);
+    }
+
+    const updateMembership = await Membership.findOne({
+      where: { userId: memberId },
+    });
+
+    res.json({ updateMembership });
+  }
+);
 
 /*-------------------------------PUT-------------------------------*/
 
