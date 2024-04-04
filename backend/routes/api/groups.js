@@ -464,6 +464,58 @@ router.post(
   }
 );
 
+// Request a Membership for a Group based on the Group's id
+router.post("/:groupId/membership", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const { groupId } = req.params;
+
+  const group = await Group.findByPk(groupId);
+
+  if (!group) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
+  }
+
+  const pendingMembership = await group.getMemberships({
+    where: { userId: user.id, status: "pending" },
+  });
+  const acceptedMembership = await group.getMemberships({
+    where: { userId: user.id, status: { [Op.notLike]: "pending" } },
+  });
+
+  if (user.id === group.organizerId || acceptedMembership.length) {
+    const err = new Error();
+    err.status = 400;
+    err.title = "Bad Request";
+    err.message = "User is already a member of the group";
+
+    return next(err);
+  }
+  if (pendingMembership.length) {
+    const err = new Error();
+    err.status = 400;
+    err.title = "Bad Request";
+    err.message = "Membership has already been requested";
+
+    return next(err);
+  }
+
+  const newMember = await Membership.create({
+    userId: user.id,
+    groupId,
+    status: "pending",
+  });
+
+  return res.json({
+    memberId: newMember.userId,
+    status: newMember.status,
+  });
+});
+
 /*-------------------------------POST------------------------------*/
 
 /*-------------------------------PUT-------------------------------*/
