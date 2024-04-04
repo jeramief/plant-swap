@@ -1,7 +1,7 @@
 "use strict";
 
 const { Op } = require("sequelize");
-const { GroupImage, EventImage } = require("../models");
+const { GroupImage } = require("../models");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
@@ -26,31 +26,10 @@ const groupImages = [
   },
 ];
 
-const eventImages = [
-  {
-    eventId: 1,
-    url: "image url",
-    preview: true,
-  },
-  {
-    eventId: 2,
-    url: "image url",
-    preview: true,
-  },
-  {
-    eventId: 1,
-    url: "image url",
-    preview: false,
-  },
-];
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await GroupImage.bulkCreate(groupImages, {
-      validate: true,
-    });
-    await EventImage.bulkCreate(eventImages, {
       validate: true,
     });
   },
@@ -59,13 +38,6 @@ module.exports = {
     options.tableName = "GroupImages";
     return await queryInterface.bulkDelete(options, {
       url: { [Op.or]: groupImages.url },
-    });
-  },
-
-  async down(queryInterface, Sequelize) {
-    options.tableName = "EventImages";
-    return await queryInterface.bulkDelete(options, {
-      url: { [Op.or]: eventImages.url },
     });
   },
 };
