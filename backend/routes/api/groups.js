@@ -109,8 +109,9 @@ router.get("/:groupId/venues", requireAuth, async (req, res) => {
 
   if (user.id !== group.organizerId && !isCoHost.length) {
     const err = new Error();
-    err.status = 400;
-    err.message = "Not Authorized";
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbidden";
 
     return next(err);
   }
@@ -260,8 +261,9 @@ router.post("/:groupId/images", requireAuth, async (req, res, next) => {
 
   if (user.id !== group.organizerId && !isCoHost.length) {
     const err = new Error();
-    err.status = 400;
-    err.message = "Not Authorized";
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbiden";
 
     return next(err);
   }
@@ -305,8 +307,9 @@ router.post(
 
     if (user.id !== group.organizerId && !isCoHost.length) {
       const err = new Error();
-      err.status = 400;
-      err.message = "Not Authorized";
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
 
       return next(err);
     }
@@ -376,9 +379,9 @@ router.post(
     });
 
     if (user.id !== group.organizerId && !isCoHost.length) {
-      const err = new Error();
-      err.status = 400;
-      err.message = "Not Authorized";
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
 
       return next(err);
     }
@@ -435,9 +438,9 @@ router.put("/:groupId", requireAuth, async (req, res, next) => {
   }
 
   if (user.id !== group.organizerId && !isCoHost.length) {
-    const err = new Error();
-    err.status = 400;
-    err.message = "Not Authorized";
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbiden";
 
     return next(err);
   }
@@ -488,9 +491,9 @@ router.delete("/:groupId", requireAuth, async (req, res, next) => {
   }
 
   if (user.id !== group.organizerId && !isCoHost.length) {
-    const err = new Error();
-    err.status = 400;
-    err.message = "Not Authorized";
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbiden";
 
     return next(err);
   }

@@ -7,6 +7,7 @@ const {
   Membership,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
+const { validateEvent } = require("../../utils/validation");
 
 /*-------------------------------GET-------------------------------*/
 // Get all Events
@@ -161,9 +162,9 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
 
   if (user.id !== event.organizerId && !isMember) {
     const err = new Error();
-    err.title = "Not Authorized";
-    err.status = 400;
-    err.message = "Needs authorization";
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbiden";
 
     return next(err);
   }
@@ -178,6 +179,89 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
     id: newEventImage.id,
     url: newEventImage.url,
     preview: newEventImage.preview,
+  });
+});
+
+/*-------------------------------POST------------------------------*/
+
+/*-------------------------------POST------------------------------*/
+
+router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
+  const { user } = req;
+  const {
+    venueId,
+    name,
+    type,
+    capacity,
+    price,
+    description,
+    startDate,
+    endDate,
+  } = req.body;
+
+  const event = await Event.findByPk(req.params.eventId);
+  const venue = await Venue.findByPk(venueId);
+
+  if (!event) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Event couldn't be found";
+
+    return next(err);
+  }
+  if (!venue) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Venue couldn't be found";
+
+    return next(err);
+  }
+
+  const isOrganizer = await event.getGroup({
+    where: { organizerId: user.id },
+  });
+
+  const isCoHost = await event.getGroup({
+    attributes: [],
+    include: {
+      model: Membership,
+      where: { userId: user.id, status: "co-host" },
+    },
+  });
+
+  if (!isOrganizer && !isCoHost) {
+    const err = new Error();
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbiden";
+
+    return next(err);
+  }
+
+  await event.update({
+    venueId,
+    name,
+    type,
+    capacity,
+    price,
+    description,
+    startDate,
+    endDate,
+  });
+
+  res.json({
+    id: event.id,
+    groupId: event.groupId,
+    venueId,
+    name: event.name,
+    type: event.type,
+    capacity: event.capacity,
+    price: event.price,
+    description: event.description,
+    startDate: event.startDate,
+    endDate: event.endDate,
   });
 });
 

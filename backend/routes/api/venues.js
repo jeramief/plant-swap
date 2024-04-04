@@ -27,9 +27,12 @@ router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
   });
 
   if (user.id !== venue.MainVenues.organizerId && !isCoHost.length) {
-    return res.status(400).json({
-      message: "Only the Organizer or co-host of the group can manage group",
-    });
+    const err = new Error();
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbiden";
+
+    return next(err);
   }
 
   const updateVenue = await venue.update({
