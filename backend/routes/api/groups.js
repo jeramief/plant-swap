@@ -632,6 +632,8 @@ router.put(
       where: { userId: memberId },
     });
 
+    await updateMembership.update({ userId: memberId, status });
+
     res.json({ updateMembership });
   }
 );
@@ -640,6 +642,7 @@ router.put(
 
 /*-------------------------------DELETE----------------------------*/
 
+// Delete a Group
 router.delete("/:groupId", requireAuth, async (req, res, next) => {
   const { user } = req;
 
@@ -670,6 +673,70 @@ router.delete("/:groupId", requireAuth, async (req, res, next) => {
 
   return res.json({ message: "Successfully deleted" });
 });
+
+// Delete membership to a group specified by id
+router.delete(
+  "/:groupId/membership/:memberId",
+  requireAuth,
+  async (req, res, next) => {
+    const { user } = req;
+    const { groupId, memberId } = req.params;
+
+    const group = await Group.findByPk(groupId);
+
+    if (!group) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Group couldn't be found";
+
+      return next(err);
+    }
+
+    const isUser = await User.findByPk(memberId);
+    const isCoHost = await group.getMemberships({
+      where: { userId: user.id, status: "co-host" },
+    });
+    const isMember = await group.getMemberships({
+      where: { userId: memberId },
+    });
+
+    if (
+      user.id !== group.organizerId &&
+      !isCoHost.length &&
+      user.id !== isMember[0].userId
+    ) {
+      const err = new Error();
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
+
+      return next(err);
+    }
+    if (!isUser) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "User couldn't be found";
+
+      return next(err);
+    }
+    if (!isMember.length) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Membership between the user and the group does not exist";
+
+      return next(err);
+    }
+
+    await isMember[0].destroy();
+
+    res.json({
+      message: "Successfully deleted membership from group",
+    });
+  }
+);
 
 /*-------------------------------DELETE----------------------------*/
 
