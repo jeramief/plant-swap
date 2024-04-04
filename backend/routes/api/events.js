@@ -10,7 +10,7 @@ const {
   User,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
-const { validateEvent } = require("../../utils/validation");
+const { validateEvent, validateAttendance } = require("../../utils/validation");
 
 /*-------------------------------GET-------------------------------*/
 // Get all Events
@@ -241,10 +241,65 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
   });
 });
 
-/*-------------------------------POST------------------------------*/
+// Request to Attend an Event based on the Event's id
+router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const { eventId } = req.params;
+
+  const event = await Event.findByPk(eventId, {
+    include: Group,
+  });
+
+  if (!event) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Event couldn't be found";
+
+    return next(err);
+  }
+
+  const pendingAttendance = await Attendance.findAll({
+    where: { eventId, userId: user.id, status: "pending" },
+  });
+  const acceptedAttendance = await Attendance.findAll({
+    where: { eventId, userId: user.id, status: { [Op.notLike]: "pending" } },
+  });
+
+  if (user.id === event.Group.organizerId || acceptedAttendance.length) {
+    const err = new Error();
+    err.status = 400;
+    err.title = "Bad Request";
+    err.message = "User is already a member of the event";
+
+    return next(err);
+  }
+  if (pendingAttendance.length) {
+    const err = new Error();
+    err.status = 400;
+    err.title = "Bad Request";
+    err.message = "Attendance has already been requested";
+
+    return next(err);
+  }
+
+  const newAttendance = await Attendance.create({
+    userId: user.id,
+    eventId,
+    status: "pending",
+  });
+
+  return res.json({
+    userId: newAttendance.userId,
+    status: newAttendance.status,
+  });
+});
 
 /*-------------------------------POST------------------------------*/
 
+/*-------------------------------PUT-------------------------------*/
+
+// Edit an Event specified by its id
 router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
   const { user } = req;
   const {
@@ -323,10 +378,84 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
   });
 });
 
-/*-------------------------------POST------------------------------*/
+// Change the status of an attendance for an event specified by id
+router.put(
+  "/:eventId/attendance",
+  requireAuth,
+  validateAttendance,
+  async (req, res, next) => {
+    const { user } = req;
+    const { eventId } = req.params;
+    const { userId, status } = req.body;
+
+    const event = await Event.findByPk(eventId, {
+      include: Group,
+    });
+
+    if (!event) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Event couldn't be found";
+
+      return next(err);
+    }
+
+    const isUser = await User.findByPk(userId);
+    const isCoHost = await event.Group.getMemberships({
+      where: { userId: user.id, status: "co-host" },
+    });
+    const isMember = await event.Group.getMemberships({
+      where: { userId: userId },
+    });
+
+    if (user.id !== event.Group.organizerId && !isCoHost.length) {
+      const err = new Error();
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
+
+      return next(err);
+    }
+    if (!isUser) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "User couldn't be found";
+
+      return next(err);
+    }
+    if (!isMember.length) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Attendance between the user and the event does not exist";
+
+      return next(err);
+    }
+    console.log({ cohost: isCoHost[0], organizer: event.Group.organizerId });
+    const updateAttendance = await Attendance.findOne({
+      where: { userId, eventId },
+    });
+
+    await updateAttendance.update({
+      status,
+    });
+
+    res.json({
+      id: updateAttendance.id,
+      eventId: updateAttendance.eventId,
+      userId: updateAttendance.userId,
+      status: updateAttendance.status,
+    });
+  }
+);
+
+/*-------------------------------PUT-------------------------------*/
 
 /*-------------------------------DELETE----------------------------*/
 
+// Delete an Event specified by its id
 router.delete("/:eventId", requireAuth, async (req, res, next) => {
   const { user } = req;
 

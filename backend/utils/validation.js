@@ -157,6 +157,13 @@ const validateMembership = [
   handleValidationErrors,
 ];
 
+const validateAttendance = [
+  check("status")
+    .isIn(["attending"])
+    .withMessage("Cannot change a membership status to pending"),
+  handleValidationErrors,
+];
+
 module.exports = {
   validateSignup,
   validateLogin,
@@ -164,4 +171,5 @@ module.exports = {
   validateVenue,
   validateEvent,
   validateMembership,
+  validateAttendance,
 };
