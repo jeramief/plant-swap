@@ -267,4 +267,47 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
 
 /*-------------------------------POST------------------------------*/
 
+/*-------------------------------POST------------------------------*/
+
+router.delete("/:eventId", requireAuth, async (req, res, next) => {
+  const { user } = req;
+
+  const event = await Event.findByPk(req.params.eventId);
+
+  if (!event) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Event couldn't be found";
+
+    return next(err);
+  }
+
+  const isOrganizer = await event.getGroup({
+    where: { organizerId: user.id },
+  });
+  const isCoHost = await event.getGroup({
+    attributes: [],
+    include: {
+      model: Membership,
+      where: { userId: user.id, status: "co-host" },
+    },
+  });
+
+  if (!isOrganizer && !isCoHost) {
+    const err = new Error();
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbiden";
+
+    return next(err);
+  }
+
+  await event.destroy();
+
+  return res.json({ message: "Successfully deleted" });
+});
+
+/*-------------------------------POST------------------------------*/
+
 module.exports = router;
