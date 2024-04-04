@@ -495,6 +495,76 @@ router.delete("/:eventId", requireAuth, async (req, res, next) => {
   return res.json({ message: "Successfully deleted" });
 });
 
+// Delete attendance to an event specified by id
+router.delete(
+  "/:eventId/attendance/:userId",
+  requireAuth,
+  async (req, res, next) => {
+    const { user } = req;
+    const { eventId, userId } = req.params;
+
+    const event = await Event.findByPk(eventId, {
+      include: Group,
+    });
+
+    if (!event) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Event couldn't be found";
+
+      return next(err);
+    }
+    const isUser = await User.findByPk(userId);
+    const isCoHost = await event.Group.getMemberships({
+      where: { userId: user.id, status: "co-host" },
+    });
+    const isAttendee = await Attendance.findOne({
+      where: { userId: parseInt(userId), eventId },
+    });
+
+    console.log({ isAttendee });
+
+    if (!isUser) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "User couldn't be found";
+
+      return next(err);
+    }
+    if (
+      user.id !== event.Group.organizerId &&
+      !isCoHost.length &&
+      user.id !== parseInt(userId)
+    ) {
+      const err = new Error();
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
+
+      return next(err);
+    }
+    if (!isAttendee) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Attendance between the user and the event does not exist";
+
+      return next(err);
+    }
+    const deleteAttendance = await Attendance.findOne({
+      where: { userId, eventId },
+    });
+
+    await deleteAttendance.destroy();
+
+    res.json({
+      message: "Successfully deleted attendance from event",
+    });
+  }
+);
+
 /*-------------------------------DELETE----------------------------*/
 
 module.exports = router;
