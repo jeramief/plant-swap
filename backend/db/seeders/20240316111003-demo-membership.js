@@ -15,6 +15,11 @@ const members = [
     status: "co-host",
   },
   {
+    userId: 2,
+    groupId: 3,
+    status: "co-host",
+  },
+  {
     userId: 1,
     groupId: 1,
     status: "member",

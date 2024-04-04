@@ -1,10 +1,13 @@
 const router = require("express").Router();
+const { Op } = require("sequelize");
 const {
   Event,
   Group,
   Venue,
   EventImage,
   Membership,
+  Attendance,
+  User,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
 const { validateEvent } = require("../../utils/validation");
@@ -132,6 +135,62 @@ router.get("/:eventId", async (req, res, next) => {
 
   res.json({ event: { event, EventImages: eventImages, numAttending } });
 });
+
+// Get all Attendees of an Event specified by its id
+router.get("/:eventId/attendees", async (req, res, next) => {
+  const { user } = req;
+  const { eventId } = req.params;
+
+  const group = await Event.findByPk(eventId, {
+    attributes: [],
+    include: {
+      model: Group,
+    },
+  });
+
+  if (!group) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Event couldn't be found";
+
+    return next(err);
+  }
+
+  const isCoHost = await group.Group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
+
+  if (user.id == group.Group.organizerId || isCoHost.length) {
+    const attendees = await User.findAll({
+      attributes: ["id", "firstName", "lastName"],
+      include: {
+        model: Attendance,
+        attributes: ["status"],
+        where: {
+          eventId,
+        },
+      },
+    });
+
+    return res.json({ Attendees: attendees });
+  } else {
+    const attendees = await User.findAll({
+      attributes: ["id", "firstName", "lastName"],
+      include: {
+        model: Attendance,
+        attributes: ["status"],
+        where: {
+          eventId,
+          status: { [Op.notLike]: "pending" },
+        },
+      },
+    });
+
+    return res.json({ Members: attendees });
+  }
+});
+
 /*-------------------------------GET-------------------------------*/
 
 /*-------------------------------POST------------------------------*/
@@ -266,7 +325,7 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
 
 /*-------------------------------POST------------------------------*/
 
-/*-------------------------------POST------------------------------*/
+/*-------------------------------DELETE----------------------------*/
 
 router.delete("/:eventId", requireAuth, async (req, res, next) => {
   const { user } = req;
@@ -307,6 +366,6 @@ router.delete("/:eventId", requireAuth, async (req, res, next) => {
   return res.json({ message: "Successfully deleted" });
 });
 
-/*-------------------------------POST------------------------------*/
+/*-------------------------------DELETE----------------------------*/
 
 module.exports = router;

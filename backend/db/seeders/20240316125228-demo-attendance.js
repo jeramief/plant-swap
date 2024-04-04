@@ -15,12 +15,17 @@ const attendances = [
     status: "attending",
   },
   {
-    eventId: 2,
+    eventId: 3,
     userId: 2,
     status: "waitlist",
   },
   {
     eventId: 1,
+    userId: 3,
+    status: "pending",
+  },
+  {
+    eventId: 3,
     userId: 3,
     status: "pending",
   },
