@@ -47,9 +47,7 @@ router.delete("/event-images/:imageId", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { imageId } = req.params;
 
-  const eventImage = await EventImage.findByPk(imageId, {
-    include: Event,
-  });
+  const eventImage = await EventImage.findByPk(imageId);
 
   if (!eventImage) {
     const err = new Error();
@@ -60,11 +58,15 @@ router.delete("/event-images/:imageId", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
-  const isCoHost = await eventImage.Event.getMemberships({
+  const event = await eventImage.getEvent({
+    include: Group,
+  });
+
+  const isCoHost = await event.Group.getMemberships({
     where: { userId: user.id, status: "co-host" },
   });
 
-  if (user.id !== eventImage.Event.organizerId && !isCoHost.length) {
+  if (user.id !== event.organizerId && !isCoHost.length) {
     const err = new Error();
     err.title = "Forbidden";
     err.status = 403;
@@ -73,10 +75,10 @@ router.delete("/event-images/:imageId", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
-  // await eventImage.destroy();
+  await eventImage.destroy();
 
   res.json({
-    hello: "world",
+    message: "Successfully deleted",
   });
 });
 
