@@ -39,9 +39,9 @@ router.get("/", async (req, res) => {
 router.get("/current", requireAuth, async (req, res) => {
   const { user } = req;
 
-  const currentUser = await User.findByPk(user.id, {
-    include: { model: Membership },
-  });
+  // const currentUser = await User.findByPk(user.id, {
+  //   include: { model: Membership },
+  // });
   const groupOrganizer = await Group.findAll({
     where: {
       organizerId: user.id,
@@ -57,10 +57,10 @@ router.get("/current", requireAuth, async (req, res) => {
     return next(err);
   }
 
-  const userGroups = await user.Memberships.getGroups();
+  // const userGroups = await currentUser.Memberships.getGroup();
 
   res.json({
-    Groups: [...groupOrganizer, ...userGroups],
+    Groups: [...groupOrganizer /*...userGroups*/],
   });
 });
 
