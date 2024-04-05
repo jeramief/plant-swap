@@ -1,5 +1,5 @@
 const express = require("express");
-// const { check } = require("express-validator");
+const { Op } = require("sequelize");
 
 const {
   Group,
@@ -206,6 +206,57 @@ router.get("/:groupId/events", async (req, res, next) => {
 
   return res.json({ Events: eventsArr });
 });
+
+// Get all Members of a Group specified by its id
+router.get("/:groupId/members", async (req, res, next) => {
+  const { user } = req;
+  const { groupId } = req.params;
+
+  const group = await Group.findByPk(groupId);
+
+  if (!group) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
+  }
+
+  const isCoHost = await group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
+
+  if (user.id === group.organizerId || isCoHost.length) {
+    const members = await User.findAll({
+      attributes: ["id", "firstName", "lastName"],
+      include: {
+        model: Membership,
+        attributes: ["status"],
+        where: {
+          groupId,
+        },
+      },
+    });
+
+    return res.json({ Members: members });
+  } else {
+    const members = await User.findAll({
+      attributes: ["id", "firstName", "lastName"],
+      include: {
+        model: Membership,
+        attributes: ["status"],
+        where: {
+          groupId,
+          status: { [Op.notLike]: "pending" },
+        },
+      },
+    });
+
+    return res.json({ Members: members });
+  }
+});
+
 /*-------------------------------GET-------------------------------*/
 
 /*-------------------------------POST------------------------------*/

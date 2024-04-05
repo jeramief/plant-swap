@@ -222,7 +222,6 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
   const isOrganizer = await event.getGroup({
     where: { organizerId: user.id },
   });
-
   const isCoHost = await event.getGroup({
     attributes: [],
     include: {
