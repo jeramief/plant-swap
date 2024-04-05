@@ -43,7 +43,7 @@ router.post("/", validateLogin, async (req, res, next) => {
     const err = new Error("Invalid credentials");
     err.status = 401;
     err.title = "Login failed";
-    err.errors = { credential: "The provided credentials were invalid" };
+    // err.errors = { credential: "The provided credentials were invalid" };
 
     return next(err);
   }

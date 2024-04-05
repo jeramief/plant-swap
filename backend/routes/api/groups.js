@@ -39,14 +39,25 @@ router.get("/", async (req, res) => {
 router.get("/current", requireAuth, async (req, res) => {
   const { user } = req;
 
+  const currentUser = await User.findByPk(user.id, {
+    include: { model: Membership },
+  });
   const groupOrganizer = await Group.findAll({
     where: {
       organizerId: user.id,
     },
   });
-  const userGroups = await user.getGroups({
-    attributes: { exclude: [Membership] },
-  });
+
+  if (!groupOrganizer) {
+    const err = new Error();
+    err.status = 404;
+    err.title = "Not Found.";
+    err.message = "Group couldn't be found";
+
+    return next(err);
+  }
+
+  const userGroups = await user.Memberships.getGroups();
 
   res.json({
     Groups: [...groupOrganizer, ...userGroups],
@@ -54,7 +65,7 @@ router.get("/current", requireAuth, async (req, res) => {
 });
 
 // get Group details by id
-router.get("/:groupId", async (req, res) => {
+router.get("/:groupId", async (req, res, next) => {
   const group = await Group.findByPk(req.params.groupId, {
     attributes: { exclude: ["previewImage"] },
     include: [
@@ -298,18 +309,19 @@ router.post("/:groupId/images", requireAuth, async (req, res, next) => {
   const { url, preview } = req.body;
 
   const group = await Group.findByPk(groupId);
-  const isCoHost = await group.getMemberships({
-    where: { userId: user.id, status: "co-host" },
-  });
 
   if (!group) {
     const err = new Error();
     err.status = 404;
-    err.title = "Not Found.";
+    // err.title = "Not Found.";
     err.message = "Group couldn't be found";
 
     return next(err);
   }
+
+  const isCoHost = await group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
 
   if (user.id !== group.organizerId && !isCoHost.length) {
     const err = new Error();
@@ -522,13 +534,12 @@ router.post("/:groupId/membership", requireAuth, async (req, res, next) => {
 /*-------------------------------PUT-------------------------------*/
 
 // edit a group
-router.put("/:groupId", requireAuth, async (req, res, next) => {
+router.put("/:groupId", requireAuth, validateGroup, async (req, res, next) => {
   const { user } = req;
   const { name, about, type, private, city, state } = req.body;
 
   const group = await Group.findByPk(req.params.groupId);
 
-  // checkForGroup(res, group);
   if (!group) {
     const err = new Error();
     err.status = 404;
