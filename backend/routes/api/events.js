@@ -10,14 +10,37 @@ const {
   User,
 } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
-const { validateEvent, validateAttendance } = require("../../utils/validation");
+const {
+  validateEvent,
+  validateAttendance,
+  validateQuery,
+} = require("../../utils/validation");
 
 /*-------------------------------GET-------------------------------*/
 // Get all Events
-router.get("/", async (req, res) => {
+router.get("/", validateQuery, async (req, res) => {
+  let { page, size, name, type, startDate } = req.query;
+
+  size = parseInt(size);
+  page = parseInt(page);
+
+  if (!page) page = 0;
+  if (!size) size = 5;
+
+  const where = {};
+  const pagination = {
+    limit: size,
+    offset: size * (page - 1),
+  };
+
+  if (name) where.name = { [Op.like]: `%${name}%` };
+  if (type) where.type = { [Op.like]: `%${type}%` };
+  if (startDate) where.startDate = startDate;
+
   const eventsArr = [];
 
   const events = await Event.findAll({
+    where,
     attributes: [
       "id",
       "groupId",
@@ -37,6 +60,7 @@ router.get("/", async (req, res) => {
         attributes: ["id", "city", "state"],
       },
     ],
+    ...pagination,
   });
 
   for (const event of events) {

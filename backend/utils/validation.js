@@ -1,4 +1,4 @@
-const { validationResult, check } = require("express-validator");
+const { validationResult, check, query } = require("express-validator");
 
 // middleware for formatting errors from express-validator middleware
 const handleValidationErrors = (req, _res, next) => {
@@ -164,6 +164,27 @@ const validateAttendance = [
   handleValidationErrors,
 ];
 
+const validateQuery = [
+  query("page")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("Page must be greater than or equal to 1"),
+  query("size")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("Size must be greater than or equal to 1"),
+  query("name").optional().isString().withMessage("Name must be a string"),
+  query("type")
+    .optional()
+    .isIn(["Online", "In Person"])
+    .withMessage("Type must be 'Online' or 'In Person'"),
+  query("startDate")
+    .optional()
+    .isISO8601("yyyy-mm-dd")
+    .withMessage("Start date must be a valid datetime"),
+  handleValidationErrors,
+];
+
 module.exports = {
   validateSignup,
   validateLogin,
@@ -172,4 +193,5 @@ module.exports = {
   validateEvent,
   validateMembership,
   validateAttendance,
+  validateQuery,
 };
