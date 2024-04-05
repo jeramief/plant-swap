@@ -99,15 +99,12 @@ router.get("/:groupId", async (req, res, next) => {
 });
 
 // Get All Venues for a Group specified by its id
-router.get("/:groupId/venues", requireAuth, async (req, res) => {
+router.get("/:groupId/venues", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { groupId } = req.params;
 
   let group = await Group.findByPk(groupId, {
     include: [{ model: Venue, include: [] }],
-  });
-  const isCoHost = await group.getMemberships({
-    where: { userId: user.id, status: "co-host" },
   });
 
   if (!group) {
@@ -118,6 +115,10 @@ router.get("/:groupId/venues", requireAuth, async (req, res) => {
 
     return next(err);
   }
+
+  const isCoHost = await group.getMemberships({
+    where: { userId: user.id, status: "co-host" },
+  });
 
   if (user.id !== group.organizerId && !isCoHost.length) {
     const err = new Error();
@@ -350,15 +351,12 @@ router.post(
   "/:groupId/venues",
   requireAuth,
   validateVenue,
-  async (req, res) => {
+  async (req, res, next) => {
     const { user } = req;
     const { groupId } = req.params;
     const { address, city, state, lat, lng } = req.body;
 
     const group = await Group.findByPk(groupId);
-    const isCoHost = await group.getMemberships({
-      where: { userId: user.id, status: "co-host" },
-    });
 
     if (!group) {
       const err = new Error();
@@ -368,6 +366,10 @@ router.post(
 
       return next(err);
     }
+
+    const isCoHost = await group.getMemberships({
+      where: { userId: user.id, status: "co-host" },
+    });
 
     if (user.id !== group.organizerId && !isCoHost.length) {
       const err = new Error();
