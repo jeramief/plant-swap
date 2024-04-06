@@ -534,7 +534,7 @@ router.post(
 
     const newGroupEvent = await Event.create({
       groupId: group.id,
-      venueId: venue.id || null,
+      venueId: venue.id,
       name,
       type,
       capacity,
@@ -545,6 +545,7 @@ router.post(
     });
 
     res.json({
+      id: newGroupEvent.id,
       groupId: newGroupEvent.groupId,
       venueId: newGroupEvent.venueId,
       name: newGroupEvent.name,
