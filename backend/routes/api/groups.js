@@ -1,5 +1,5 @@
 const express = require("express");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 const {
   Group,
@@ -399,100 +399,13 @@ router.post(
 );
 
 // Create an Event for a Group specified by its id
-// router.post(
-//   "/:groupId/events",
-//   requireAuth,
-//   validateEvent,
-//   async (req, res, next) => {
-//     const { user } = req;
-//     const { groupId } = req.params;
-//     const {
-//       venueId,
-//       name,
-//       type,
-//       capacity,
-//       price,
-//       description,
-//       startDate,
-//       endDate,
-//     } = req.body;
-
-//     // const group = await Group.findOne({ id: parseInt(groupId) });
-//     // const venue = await Venue.findOne({ id: parseInt(venueId) });
-//     const group = await Group.findByPk(groupId);
-//     const venue = await Venue.findByPk(venueId);
-
-//     if (!group) {
-//       const err = new Error();
-//       err.status = 404;
-//       err.title = "Not Found.";
-//       err.message = "Group couldn't be found";
-
-//       return next(err);
-//     }
-//     if (!venue) {
-//       const err = new Error();
-//       err.status = 404;
-//       err.title = "Not Found.";
-//       err.message = "Venue couldn't be found";
-
-//       return next(err);
-//     }
-
-//     const isCoHost = await group.getMemberships({
-//       where: { userId: user.id, status: "co-host" },
-//     });
-
-//     if (user.id !== group.organizerId && !isCoHost.length) {
-//       const err = new Error();
-//       err.title = "Forbidden";
-//       err.status = 403;
-//       err.message = "Forbiden";
-
-//       return next(err);
-//     }
-
-//     const newGroupEvent = await Event.create({
-//       groupId: group.id,
-//       venueId: venue.id || null,
-//       name,
-//       type,
-//       capacity,
-//       price,
-//       description,
-//       startDate,
-//       endDate,
-//     });
-
-//     console.log({ newGroupEvent, venue, group });
-
-//     res.json(newGroupEvent);
-//   }
-// );
 router.post(
   "/:groupId/events",
   requireAuth,
   validateEvent,
   async (req, res, next) => {
     const { user } = req;
-    let { groupId } = req.params;
-    groupId = parseInt(groupId);
-
-    let foundGroup = await Group.findOne({
-      include: {
-        model: Membership,
-        include: {
-          model: User,
-          where: { id: user.id },
-          required: false,
-        },
-        required: false,
-      },
-    });
-
-    if (!foundGroup)
-      return res.status(404).json({ message: "Group couldn't be found" });
-
+    const { groupId } = req.params;
     const {
       venueId,
       name,
@@ -504,45 +417,56 @@ router.post(
       endDate,
     } = req.body;
 
-    const foundVenue = await Venue.findOne();
-    if (!foundVenue)
-      return res.status(404).json({ message: "Venue couldn't be found" });
+    // const group = await Group.findOne({ id: parseInt(groupId) });
+    // const venue = await Venue.findOne({ id: parseInt(venueId) });
+    const group = await Group.findByPk(groupId);
+    const venue = await Venue.findByPk(venueId);
 
-    foundGroup = foundGroup.toJSON();
-    const isOrganizer = foundGroup.organizerId === user.id;
-    let isCoHost = false;
-    // if (foundGroup.Memberships.length > 0)
-    // isCoHost = foundGroup.Memberships[0].Membership.status === "co-host";
-    // if (!isOrganizer && !isCoHost) return next(new Error("Forbidden"));
+    if (!group) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Group couldn't be found";
 
-    // if (!validateEventData(req, res)) return;
+      return next(err);
+    }
+    if (!venue) {
+      const err = new Error();
+      err.status = 404;
+      err.title = "Not Found.";
+      err.message = "Venue couldn't be found";
 
-    const newEvent = await Event.create({
-      groupId: parseInt(groupId),
-      venueId: parseInt(venueId),
+      return next(err);
+    }
+
+    const isCoHost = await group.getMemberships({
+      where: { userId: user.id, status: "co-host" },
+    });
+
+    if (user.id !== group.organizerId && !isCoHost.length) {
+      const err = new Error();
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
+
+      return next(err);
+    }
+
+    const newGroupEvent = await Event.create({
+      groupId: group.id,
+      venueId: venue.id || null,
       name,
       type,
       capacity,
-      price: parseFloat(price),
+      price,
       description,
       startDate,
       endDate,
     });
 
-    console.log({ newEvent });
+    console.log({ newGroupEvent, venue, group });
 
-    res.json({
-      id: newEvent.id,
-      groupId: newEvent.groupId,
-      venueId: newEvent.venueId,
-      name: newEvent.name,
-      type: newEvent.type,
-      capacity: newEvent.capacity,
-      price: parseFloat(newEvent.price),
-      description: newEvent.description,
-      startDate: newEvent.startDate,
-      endDate: newEvent.endDate,
-    });
+    res.json(newGroupEvent);
   }
 );
 

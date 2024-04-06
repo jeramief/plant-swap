@@ -123,7 +123,7 @@ const validateEvent = [
   check("type")
     .exists({ checkFalsy: true })
     .notEmpty()
-    .isIn(["Online", "In Person"])
+    .isIn(["Online", "In Person", "online", "in person", "In person"])
     .withMessage("Type must be Online or In person"),
   check("capacity")
     .isInt({ min: 1 })

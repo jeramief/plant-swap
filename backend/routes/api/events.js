@@ -225,7 +225,6 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
   const { eventId } = req.params;
   const { url, preview } = req.body;
 
-  console.log({ eventId });
   const event = await Event.findByPk(eventId);
 
   if (!event) {
@@ -237,12 +236,21 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
+  const group = await event.getGroup();
   const isMember = await event.getGroup({
     attributes: [],
     include: { model: Membership, where: { userId: user.id } },
   });
+  console.log({
+    isMember,
+    eventId,
+    event,
+    organizerId: group.organizerId,
+    group: event.Group,
+    group,
+  });
 
-  if (user.id !== event.organizerId && !isMember) {
+  if (user.id !== group.organizerId && !isMember) {
     const err = new Error();
     err.title = "Forbidden";
     err.status = 403;

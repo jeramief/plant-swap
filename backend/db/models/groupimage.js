@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   GroupImage.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       groupId: {
         allowNull: false,
         type: DataTypes.INTEGER,
