@@ -66,7 +66,7 @@ router.delete("/event-images/:imageId", requireAuth, async (req, res, next) => {
     where: { userId: user.id, status: "co-host" },
   });
 
-  if (user.id !== event.organizerId && !isCoHost.length) {
+  if (user.id !== event.Group.organizerId && !isCoHost.length) {
     const err = new Error();
     err.title = "Forbidden";
     err.status = 403;

@@ -9,7 +9,7 @@ const router = express.Router();
 /*-------------------------------PUT-------------------------------*/
 
 // Edit a Venue specified by its id
-router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
+router.put("/:venueId", requireAuth, validateVenue, async (req, res, next) => {
   const { user } = req;
   const { venueId } = req.params;
   const { address, city, state, lat, lng } = req.body;

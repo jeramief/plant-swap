@@ -130,7 +130,7 @@ const validateEvent = [
     .withMessage("Capacity must be an integer"),
   check("price")
     .exists({ checkFalsy: true })
-    .isFloat()
+    .isFloat({ min: 0 })
     .withMessage("Price is invalid"),
   check("description")
     .exists({ checkFalsy: true })
