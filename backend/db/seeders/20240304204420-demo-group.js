@@ -20,8 +20,6 @@ module.exports = {
           private: true,
           city: "New York",
           state: "NY",
-          numMembers: 10,
-          previewImage: "image url",
         },
         {
           organizerId: 3,
@@ -32,8 +30,6 @@ module.exports = {
           private: true,
           city: "Los Santos",
           state: "San Andreas",
-          numMembers: 10,
-          previewImage: "image url",
         },
         {
           organizerId: 1,
@@ -44,8 +40,6 @@ module.exports = {
           private: true,
           city: "Las Venturas",
           state: "San Andreas",
-          numMembers: 10,
-          previewImage: "image url",
         },
       ],
       { validate: true }

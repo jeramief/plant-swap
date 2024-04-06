@@ -22,21 +22,63 @@ const router = express.Router();
 
 /*-------------------------------GET-------------------------------*/
 
-// get group - route /api/groups
+// get groups - route /api/groups
 router.get("/", async (req, res) => {
+  const groupsArr = [];
+
   // find all groups stored
-  const groups = await Group.findAll({
+  const groups = await Group.findAll(/*{
     // include: ["Organizer"],
-  });
+  }*/);
+
+  for (const group of groups) {
+    let previewImage = null;
+
+    const imageUrl = await GroupImage.findOne({
+      where: {
+        groupId: group.id,
+      },
+      attributes: ["url"],
+    });
+    const numAttending = await Group.count({
+      where: { id: group.id },
+      include: { model: Membership },
+    });
+
+    console.log({ numAttending, imageUrl });
+
+    if (imageUrl) {
+      previewImage = imageUrl.url;
+    }
+
+    const payload = {
+      id: group.id,
+      organizerId: group.organizerId,
+      name: group.name,
+      about: group.about,
+      type: group.type,
+      private: group.private,
+      city: group.city,
+      state: group.state,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt,
+      numAttending,
+      previewImage,
+    };
+
+    groupsArr.push(payload);
+  }
 
   // return groups as json
   return res.json({
-    Groups: groups,
+    Groups: groupsArr,
   });
 });
 
 // get current user's groups - route: /api/groups/current
 router.get("/current", requireAuth, async (req, res) => {
+  const groupsArr = [];
+
   const { user } = req;
 
   // const currentUser = await User.findByPk(user.id, {
@@ -57,14 +99,52 @@ router.get("/current", requireAuth, async (req, res) => {
     return next(err);
   }
 
+  for (const group of groupOrganizer) {
+    let previewImage = null;
+
+    const imageUrl = await GroupImage.findOne({
+      where: {
+        groupId: group.id,
+      },
+      attributes: ["url"],
+    });
+    const numAttending = await Group.count({
+      where: { id: group.id },
+      include: { model: Membership },
+    });
+
+    console.log({ numAttending, imageUrl });
+
+    if (imageUrl) {
+      previewImage = imageUrl.url;
+    }
+
+    const payload = {
+      id: group.id,
+      organizerId: group.organizerId,
+      name: group.name,
+      about: group.about,
+      type: group.type,
+      private: group.private,
+      city: group.city,
+      state: group.state,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt,
+      numAttending,
+      previewImage,
+    };
+
+    groupsArr.push(payload);
+  }
+
   // const userGroups = await currentUser.Memberships.getGroup();
 
   res.json({
-    Groups: [...groupOrganizer /*...userGroups*/],
+    Groups: [...groupsArr /*...userGroups*/],
   });
 });
 
-// get Group details by id
+// get Group details by id - route: /api/groups/:groupId
 router.get("/:groupId", async (req, res, next) => {
   const group = await Group.findByPk(req.params.groupId, {
     attributes: { exclude: ["previewImage"] },
@@ -98,7 +178,7 @@ router.get("/:groupId", async (req, res, next) => {
   return res.json(group);
 });
 
-// Get All Venues for a Group specified by its id
+// Get All Venues for a by its id - route: /api/groups/:groupId/venues
 router.get("/:groupId/venues", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { groupId } = req.params;
@@ -137,7 +217,7 @@ router.get("/:groupId/venues", requireAuth, async (req, res, next) => {
   res.json({ Venues: group.Venues });
 });
 
-// Get all Events of a Group specified by its id
+// Get all Events of a Group by id - route: /api/groups/:groupid/events
 router.get("/:groupId/events", async (req, res, next) => {
   const { groupId } = req.params;
 
@@ -220,7 +300,7 @@ router.get("/:groupId/events", async (req, res, next) => {
   return res.json({ Events: eventsArr });
 });
 
-// Get all Members of a Group specified by its id
+// Get all Members of Group by id - route: /api/groups/:groupid/members
 router.get("/:groupId/members", async (req, res, next) => {
   const { user } = req;
   const { groupId } = req.params;
@@ -274,7 +354,7 @@ router.get("/:groupId/members", async (req, res, next) => {
 
 /*-------------------------------POST------------------------------*/
 
-// create a group
+// create a group - route: /api/groups
 router.post("/", [requireAuth, validateGroup], async (req, res) => {
   const { name, about, type, private, city, state } = req.body;
   const { user } = req;
@@ -303,7 +383,7 @@ router.post("/", [requireAuth, validateGroup], async (req, res) => {
   });
 });
 
-// add group image
+// add group image - route: /api/groups/:groupid/images
 router.post("/:groupId/images", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { groupId } = req.params;
@@ -341,7 +421,7 @@ router.post("/:groupId/images", requireAuth, async (req, res, next) => {
   });
 });
 
-// create a new Venue for a Group specified by its id
+// create Venue for a Group by its id - route: /api/groups/:groupid/venues
 router.post(
   "/:groupId/venues",
   requireAuth,
@@ -398,7 +478,7 @@ router.post(
   }
 );
 
-// Create an Event for a Group specified by its id
+// Create Event for a Group by its id - route: /api/groups/:groupid/events
 router.post(
   "/:groupId/events",
   requireAuth,
@@ -464,13 +544,21 @@ router.post(
       endDate,
     });
 
-    console.log({ newGroupEvent, venue, group });
-
-    res.json(newGroupEvent);
+    res.json({
+      groupId: newGroupEvent.groupId,
+      venueId: newGroupEvent.venueId,
+      name: newGroupEvent.name,
+      type: newGroupEvent.type,
+      capacity: newGroupEvent.capacity,
+      price: newGroupEvent.price,
+      description: newGroupEvent.description,
+      startDate: newGroupEvent.startDate.toString(),
+      endDate: newGroupEvent.endDate.toString(),
+    });
   }
 );
 
-// Request a Membership for a Group based on the Group's id
+// Request Membership for Group based on Group id - route: /api/groups/:groupid/members
 router.post("/:groupId/membership", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { groupId } = req.params;
