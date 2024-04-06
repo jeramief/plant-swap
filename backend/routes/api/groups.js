@@ -319,12 +319,7 @@ router.post("/:groupId/images", requireAuth, async (req, res, next) => {
 
     return next(err);
   }
-
-  const isCoHost = await group.getMemberships({
-    where: { userId: user.id, status: "co-host" },
-  });
-
-  if (user.id !== group.organizerId && !isCoHost.length) {
+  if (user.id !== group.organizerId) {
     const err = new Error();
     err.title = "Forbidden";
     err.status = 403;
@@ -389,6 +384,8 @@ router.post(
       lng,
     });
 
+    console.log({ newGroupVenue });
+
     res.json({
       id: newGroupVenue.id,
       groupId: parseInt(groupId),
@@ -402,6 +399,76 @@ router.post(
 );
 
 // Create an Event for a Group specified by its id
+// router.post(
+//   "/:groupId/events",
+//   requireAuth,
+//   validateEvent,
+//   async (req, res, next) => {
+//     const { user } = req;
+//     const { groupId } = req.params;
+//     const {
+//       venueId,
+//       name,
+//       type,
+//       capacity,
+//       price,
+//       description,
+//       startDate,
+//       endDate,
+//     } = req.body;
+
+//     // const group = await Group.findOne({ id: parseInt(groupId) });
+//     // const venue = await Venue.findOne({ id: parseInt(venueId) });
+//     const group = await Group.findByPk(groupId);
+//     const venue = await Venue.findByPk(venueId);
+
+//     if (!group) {
+//       const err = new Error();
+//       err.status = 404;
+//       err.title = "Not Found.";
+//       err.message = "Group couldn't be found";
+
+//       return next(err);
+//     }
+//     if (!venue) {
+//       const err = new Error();
+//       err.status = 404;
+//       err.title = "Not Found.";
+//       err.message = "Venue couldn't be found";
+
+//       return next(err);
+//     }
+
+//     const isCoHost = await group.getMemberships({
+//       where: { userId: user.id, status: "co-host" },
+//     });
+
+//     if (user.id !== group.organizerId && !isCoHost.length) {
+//       const err = new Error();
+//       err.title = "Forbidden";
+//       err.status = 403;
+//       err.message = "Forbiden";
+
+//       return next(err);
+//     }
+
+//     const newGroupEvent = await Event.create({
+//       groupId: group.id,
+//       venueId: venue.id || null,
+//       name,
+//       type,
+//       capacity,
+//       price,
+//       description,
+//       startDate,
+//       endDate,
+//     });
+
+//     console.log({ newGroupEvent, venue, group });
+
+//     res.json(newGroupEvent);
+//   }
+// );
 router.post(
   "/:groupId/events",
   requireAuth,
@@ -409,6 +476,23 @@ router.post(
   async (req, res, next) => {
     const { user } = req;
     let { groupId } = req.params;
+    groupId = parseInt(groupId);
+
+    let foundGroup = await Group.findOne({
+      include: {
+        model: Membership,
+        include: {
+          model: User,
+          where: { id: user.id },
+          required: false,
+        },
+        required: false,
+      },
+    });
+
+    if (!foundGroup)
+      return res.status(404).json({ message: "Group couldn't be found" });
+
     const {
       venueId,
       name,
@@ -420,61 +504,44 @@ router.post(
       endDate,
     } = req.body;
 
-    const group = await Group.findByPk(groupId);
-    const venue = await Venue.findByPk(venueId);
+    const foundVenue = await Venue.findOne();
+    if (!foundVenue)
+      return res.status(404).json({ message: "Venue couldn't be found" });
 
-    if (!group) {
-      const err = new Error();
-      err.status = 404;
-      err.title = "Not Found.";
-      err.message = "Group couldn't be found";
+    foundGroup = foundGroup.toJSON();
+    const isOrganizer = foundGroup.organizerId === user.id;
+    let isCoHost = false;
+    // if (foundGroup.Memberships.length > 0)
+    // isCoHost = foundGroup.Memberships[0].Membership.status === "co-host";
+    // if (!isOrganizer && !isCoHost) return next(new Error("Forbidden"));
 
-      return next(err);
-    }
-    if (!venue) {
-      const err = new Error();
-      err.status = 404;
-      err.title = "Not Found.";
-      err.message = "Venue couldn't be found";
+    // if (!validateEventData(req, res)) return;
 
-      return next(err);
-    }
-
-    const isCoHost = await group.getMemberships({
-      where: { userId: user.id, status: "co-host" },
-    });
-
-    if (user.id !== group.organizerId && !isCoHost.length) {
-      err.title = "Forbidden";
-      err.status = 403;
-      err.message = "Forbiden";
-
-      return next(err);
-    }
-
-    const newGroupEvent = await Event.create({
-      groupId,
-      venueId,
+    const newEvent = await Event.create({
+      groupId: parseInt(groupId),
+      venueId: parseInt(venueId),
       name,
       type,
       capacity,
-      price,
+      price: parseFloat(price),
       description,
       startDate,
       endDate,
     });
 
+    console.log({ newEvent });
+
     res.json({
-      id: newGroupEvent.id,
-      groupId: parseInt(groupId),
-      venueId,
-      name: newGroupEvent.name,
-      type: newGroupEvent.type,
-      capacity: newGroupEvent.capacity,
-      price: newGroupEvent.price,
-      description: newGroupEvent.description,
-      startDate: newGroupEvent.startDate,
-      endDate: newGroupEvent.endDate,
+      id: newEvent.id,
+      groupId: newEvent.groupId,
+      venueId: newEvent.venueId,
+      name: newEvent.name,
+      type: newEvent.type,
+      capacity: newEvent.capacity,
+      price: parseFloat(newEvent.price),
+      description: newEvent.description,
+      startDate: newEvent.startDate,
+      endDate: newEvent.endDate,
     });
   }
 );
@@ -551,11 +618,7 @@ router.put("/:groupId", requireAuth, validateGroup, async (req, res, next) => {
     return next(err);
   }
 
-  const isCoHost = await group.getMemberships({
-    where: { userId: user.id, status: "co-host" },
-  });
-
-  if (user.id !== group.organizerId && !isCoHost.length) {
+  if (user.id !== group.organizerId) {
     const err = new Error();
     err.title = "Forbidden";
     err.status = 403;
@@ -609,14 +672,11 @@ router.put(
     }
 
     const isUser = await User.findByPk(memberId);
-    const isCoHost = await group.getMemberships({
-      where: { userId: user.id, status: "co-host" },
-    });
     const isMember = await group.getMemberships({
       where: { userId: memberId },
     });
 
-    if (user.id !== group.organizerId && !isCoHost.length) {
+    if (user.id !== group.organizerId) {
       const err = new Error();
       err.title = "Forbidden";
       err.status = 403;
@@ -660,11 +720,7 @@ router.delete("/:groupId", requireAuth, async (req, res, next) => {
   const { user } = req;
 
   const group = await Group.findByPk(req.params.groupId);
-  const isCoHost = await group.getMemberships({
-    where: { userId: user.id, status: "co-host" },
-  });
 
-  // checkForGroup(res, group);
   if (!group) {
     const err = new Error();
     err.status = 404;
@@ -674,7 +730,8 @@ router.delete("/:groupId", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
-  if (user.id !== group.organizerId && !isCoHost.length) {
+  if (user.id !== group.organizerId) {
+    const err = new Error();
     err.title = "Forbidden";
     err.status = 403;
     err.message = "Forbiden";
@@ -707,30 +764,23 @@ router.delete(
     }
 
     const isUser = await User.findByPk(memberId);
-    const isCoHost = await group.getMemberships({
-      where: { userId: user.id, status: "co-host" },
-    });
     const isMember = await group.getMemberships({
       where: { userId: memberId },
     });
 
-    if (
-      user.id !== group.organizerId &&
-      !isCoHost.length &&
-      user.id !== isMember[0].userId
-    ) {
-      const err = new Error();
-      err.title = "Forbidden";
-      err.status = 403;
-      err.message = "Forbiden";
-
-      return next(err);
-    }
     if (!isUser) {
       const err = new Error();
       err.status = 404;
       err.title = "Not Found.";
       err.message = "User couldn't be found";
+
+      return next(err);
+    }
+    if (user.id !== group.organizerId && user.id !== isMember[0].userId) {
+      const err = new Error();
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
 
       return next(err);
     }

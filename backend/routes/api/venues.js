@@ -6,6 +6,8 @@ const { validateVenue } = require("../../utils/validation");
 
 const router = express.Router();
 
+/*-------------------------------PUT-------------------------------*/
+
 // Edit a Venue specified by its id
 router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
   const { user } = req;
@@ -13,7 +15,7 @@ router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
   const { address, city, state, lat, lng } = req.body;
 
   const venue = await Venue.findByPk(venueId, {
-    include: { model: Group, as: "MainVenues" },
+    include: { model: Group },
   });
 
   if (!venue) {
@@ -22,11 +24,11 @@ router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
     });
   }
 
-  const isCoHost = await venue.MainVenues.getMemberships({
+  const isCoHost = await venue.Group.getMemberships({
     where: { userId: user.id, status: "co-host" },
   });
 
-  if (user.id !== venue.MainVenues.organizerId && !isCoHost.length) {
+  if (user.id !== venue.Group.organizerId && !isCoHost.length) {
     const err = new Error();
     err.title = "Forbidden";
     err.status = 403;
@@ -53,5 +55,7 @@ router.put("/:venueId", requireAuth, validateVenue, async (req, res) => {
     lng: updateVenue.lng,
   });
 });
+
+/*-------------------------------PUT-------------------------------*/
 
 module.exports = router;

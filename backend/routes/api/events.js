@@ -225,6 +225,7 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
   const { eventId } = req.params;
   const { url, preview } = req.body;
 
+  console.log({ eventId });
   const event = await Event.findByPk(eventId);
 
   if (!event) {
@@ -240,8 +241,6 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
     attributes: [],
     include: { model: Membership, where: { userId: user.id } },
   });
-
-  console.log({ isMember });
 
   if (user.id !== event.organizerId && !isMember) {
     const err = new Error();
@@ -457,7 +456,7 @@ router.put(
 
       return next(err);
     }
-    console.log({ cohost: isCoHost[0], organizer: event.Group.organizerId });
+
     const updateAttendance = await Attendance.findOne({
       where: { userId, eventId },
     });
@@ -540,14 +539,9 @@ router.delete(
       return next(err);
     }
     const isUser = await User.findByPk(userId);
-    const isCoHost = await event.Group.getMemberships({
-      where: { userId: user.id, status: "co-host" },
-    });
     const isAttendee = await Attendance.findOne({
       where: { userId: parseInt(userId), eventId },
     });
-
-    console.log({ isAttendee });
 
     if (!isUser) {
       const err = new Error();
@@ -557,11 +551,7 @@ router.delete(
 
       return next(err);
     }
-    if (
-      user.id !== event.Group.organizerId &&
-      !isCoHost.length &&
-      user.id !== parseInt(userId)
-    ) {
+    if (user.id !== event.Group.organizerId && user.id !== parseInt(userId)) {
       const err = new Error();
       err.title = "Forbidden";
       err.status = 403;

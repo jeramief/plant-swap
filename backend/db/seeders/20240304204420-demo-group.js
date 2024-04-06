@@ -56,13 +56,13 @@ module.exports = {
     options.tableName = "Groups";
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
-      options,
-      {
-        name: {
-          [Op.in]: ["Evening Tennis on the Water", "Car Show", "Pool Party"],
-        },
-      },
-      {}
+      options
+      // {
+      //   name: {
+      //     [Op.in]: ["Evening Tennis on the Water", "Car Show", "Pool Party"],
+      //   },
+      // },
+      // {}
     );
   },
 };

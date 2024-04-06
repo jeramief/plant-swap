@@ -45,7 +45,7 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = "Venues";
     return await queryInterface.bulkDelete(options, {
-      address: venues.map((venue) => venue.address),
+      // address: venues.map((venue) => venue.address),
     });
   },
 };

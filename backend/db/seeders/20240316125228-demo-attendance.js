@@ -42,7 +42,7 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = "Attendances";
     return await queryInterface.bulkDelete(options, {
-      userId: { [Op.or]: attendances.userId },
+      // userId: { [Op.or]: attendances.userId },
     });
   },
 };

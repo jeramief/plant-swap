@@ -37,7 +37,7 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = "GroupImages";
     return await queryInterface.bulkDelete(options, {
-      url: { [Op.or]: groupImages.url },
+      // url: { [Op.or]: groupImages.url },
     });
   },
 };
