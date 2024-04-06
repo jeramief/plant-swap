@@ -219,7 +219,7 @@ router.get("/:eventId/attendees", async (req, res, next) => {
 
 /*-------------------------------POST------------------------------*/
 
-// Add an Image to an Event based on the Event's id
+// Add Image to Event based on Event id - route: /api/events/:eventId/images
 router.post("/:eventId/images", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { eventId } = req.params;
@@ -237,12 +237,15 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
   }
 
   const group = await event.getGroup();
-  const isMember = await event.getGroup({
+  const isCoHost = await event.getGroup({
     attributes: [],
-    include: { model: Membership, where: { userId: user.id } },
+    include: {
+      model: Membership,
+      where: { userId: user.id, status: "co-host" },
+    },
   });
   console.log({
-    isMember,
+    isCoHost,
     eventId,
     event,
     organizerId: group.organizerId,
@@ -250,7 +253,7 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
     group,
   });
 
-  if (user.id !== group.organizerId && !isMember) {
+  if (user.id !== group.organizerId && !isCoHost) {
     const err = new Error();
     err.title = "Forbidden";
     err.status = 403;
@@ -272,13 +275,13 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
   });
 });
 
-// Request to Attend an Event based on the Event's id
+// Request to Attend Event based on Event id - route: /api/events/:eventId/attendance
 router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
   const { user } = req;
   const { eventId } = req.params;
 
   const event = await Event.findByPk(eventId, {
-    include: Group,
+    // include: Group,
   });
 
   if (!event) {
