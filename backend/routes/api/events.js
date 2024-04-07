@@ -24,7 +24,7 @@ router.get("/", validateQuery, async (req, res) => {
   size = parseInt(size);
   page = parseInt(page);
 
-  if (!page) page = 0;
+  if (!page) page = 1;
   if (!size) size = 5;
 
   const where = {};
@@ -125,11 +125,11 @@ router.get("/:eventId", async (req, res, next) => {
     include: [
       {
         model: Group,
-        attributes: ["id", "name", "city", "state"],
+        attributes: ["id", "name", "private", "city", "state"],
       },
       {
         model: Venue,
-        attributes: ["id", "city", "state"],
+        attributes: ["id", "address", "city", "state", "lat", "lng"],
       },
       // {
       //   model: "EventImages",
@@ -147,17 +147,19 @@ router.get("/:eventId", async (req, res, next) => {
     return next(err);
   }
 
-  const eventImages = await event.getEventImages();
-  const numAttending = await Group.count({
+  const eventImages = await event.getEventImages({
+    attributes: ["id", "url", "preview"],
+  });
+  const numAttending = await Event.count({
     include: {
-      model: Membership,
+      model: Attendance,
       where: {
         groupId: event.groupId,
       },
     },
   });
 
-  res.json({ event: { event, EventImages: eventImages, numAttending } });
+  res.json({ ...event, EventImages: eventImages, numAttending });
 });
 
 // Get all Attendees of an Event specified by its id
@@ -245,7 +247,7 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
     },
   });
   const isAttendee = await event.getAttendances({
-    where: { userId: user.id },
+    where: { userId: user.id, status: "attending" },
   });
 
   if (user.id !== group.organizerId && !isCoHost && !isAttendee.length) {
@@ -314,7 +316,7 @@ router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
     const err = new Error();
     err.status = 400;
     err.title = "Bad Request";
-    err.message = "User is already a member of the event";
+    err.message = "User is already an attendee of the event";
 
     return next(err);
   }

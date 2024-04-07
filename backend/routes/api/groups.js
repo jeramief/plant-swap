@@ -161,7 +161,7 @@ router.get("/:groupId", async (req, res, next) => {
       {
         model: Venue,
         attributes: ["id", "groupId", "address", "city", "state", "lat", "lng"],
-        attributes: { exclude: ["Event"] },
+        // attributes: { exclude: ["Event"] },
       },
     ],
   });
@@ -175,7 +175,17 @@ router.get("/:groupId", async (req, res, next) => {
     return next(err);
   }
 
-  return res.json(group);
+  const memberCount = await Group.count({
+    where: { id: group.id },
+    include: { model: Membership },
+  });
+
+  const payload = {
+    ...group,
+  };
+  payload.numMembers = memberCount;
+
+  return res.json(payload);
 });
 
 // Get All Venues for a by its id - route: /api/groups/:groupId/venues
@@ -720,7 +730,14 @@ router.put(
 
     await updateMembership.update({ userId: memberId, status });
 
-    res.json({ updateMembership });
+    const payload = {
+      id: updateMembership.id,
+      groupId: updateMembership.groupId,
+      memberId: updateMembership.userId,
+      status: updateMembership.status,
+    };
+
+    res.json({ payload });
   }
 );
 
