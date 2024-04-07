@@ -159,7 +159,7 @@ const validateMembership = [
 
 const validateAttendance = [
   check("status")
-    .isIn(["attending"])
+    .isIn(["attending", "waitlist"])
     .withMessage("Cannot change a membership status to pending"),
   handleValidationErrors,
 ];

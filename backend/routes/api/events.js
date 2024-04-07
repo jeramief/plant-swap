@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const {
   Event,
   Group,
@@ -244,16 +244,11 @@ router.post("/:eventId/images", requireAuth, async (req, res, next) => {
       where: { userId: user.id, status: "co-host" },
     },
   });
-  console.log({
-    isCoHost,
-    eventId,
-    event,
-    organizerId: group.organizerId,
-    group: event.Group,
-    group,
+  const isAttendee = await event.getAttendances({
+    where: { userId: user.id },
   });
 
-  if (user.id !== group.organizerId && !isCoHost) {
+  if (user.id !== group.organizerId && !isCoHost && !isAttendee.length) {
     const err = new Error();
     err.title = "Forbidden";
     err.status = 403;
@@ -281,7 +276,7 @@ router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
   const { eventId } = req.params;
 
   const event = await Event.findByPk(eventId, {
-    // include: Group,
+    include: Group,
   });
 
   if (!event) {
@@ -293,6 +288,13 @@ router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
+  const isMember = await event.getGroup({
+    attributes: [],
+    include: {
+      model: Membership,
+      where: { userId: user.id, status: { [Op.notLike]: "pending" } },
+    },
+  });
   const pendingAttendance = await Attendance.findAll({
     where: { eventId, userId: user.id, status: "pending" },
   });
@@ -300,6 +302,14 @@ router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
     where: { eventId, userId: user.id, status: { [Op.notLike]: "pending" } },
   });
 
+  if (!isMember) {
+    const err = new Error();
+    err.title = "Forbidden";
+    err.status = 403;
+    err.message = "Forbiden";
+
+    return next(err);
+  }
   if (user.id === event.Group.organizerId || acceptedAttendance.length) {
     const err = new Error();
     err.status = 400;
@@ -333,7 +343,7 @@ router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
 
 /*-------------------------------PUT-------------------------------*/
 
-// Edit an Event specified by its id
+// Edit an Event specified by its id - route: /api/events/:eventId
 router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
   const { user } = req;
   const {
@@ -412,7 +422,7 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
   });
 });
 
-// Change the status of an attendance for an event specified by id
+// Change the status of an attendance for an event specified by id - route: /api/events/:eventId/attendance
 router.put(
   "/:eventId/attendance",
   requireAuth,

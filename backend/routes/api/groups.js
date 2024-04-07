@@ -789,19 +789,19 @@ router.delete(
 
       return next(err);
     }
-    if (user.id !== group.organizerId && user.id !== isMember[0].userId) {
-      const err = new Error();
-      err.title = "Forbidden";
-      err.status = 403;
-      err.message = "Forbiden";
-
-      return next(err);
-    }
     if (!isMember.length) {
       const err = new Error();
       err.status = 404;
       err.title = "Not Found.";
       err.message = "Membership between the user and the group does not exist";
+
+      return next(err);
+    }
+    if (user.id !== group.organizerId && user.id !== isMember[0].userId) {
+      const err = new Error();
+      err.title = "Forbidden";
+      err.status = 403;
+      err.message = "Forbiden";
 
       return next(err);
     }
