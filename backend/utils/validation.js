@@ -181,14 +181,19 @@ const validateQuery = [
     .optional()
     .isInt({ max: 20 })
     .withMessage("Size must be less than or equal to 20"),
-  query("name").optional().isString().withMessage("Name must be a string"),
+  query("name")
+    .optional()
+    .notEmpty()
+    .isString()
+    .withMessage("Name must be a string"),
   query("type")
     .optional()
     .isIn(["Online", "In Person", "in person", "In person", "online"])
     .withMessage("Type must be 'Online' or 'In Person'"),
   query("startDate")
     .optional()
-    .isISO8601("yyyy-mm-dd")
+    // .isISO8601()
+    .isDate()
     .withMessage("Start date must be a valid datetime"),
   handleValidationErrors,
 ];

@@ -16,7 +16,7 @@ module.exports = {
           name: "Evening Tennis on the Water",
           about:
             "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
-          type: "In person",
+          type: "In Person",
           private: true,
           city: "New York",
           state: "NY",
@@ -26,7 +26,7 @@ module.exports = {
           name: "Car Show",
           about:
             "Show off your coolest ridesShow off your coolest ridesShow off your coolest rides.",
-          type: "In person",
+          type: "In Person",
           private: true,
           city: "Los Santos",
           state: "San Andreas",
@@ -36,7 +36,7 @@ module.exports = {
           name: "Pool Party",
           about:
             "Pool party, nothing too specialPool party, nothing too specialPool party, nothing too special.",
-          type: "In person",
+          type: "In Person",
           private: true,
           city: "Las Venturas",
           state: "San Andreas",
