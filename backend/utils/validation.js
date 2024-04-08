@@ -167,33 +167,29 @@ const validateAttendance = [
 const validateQuery = [
   query("page")
     .optional()
-    .isInt({ min: 1 })
-    .withMessage("Page must be greater than or equal to 1"),
-  query("page")
-    .optional()
     .isInt({ max: 10 })
     .withMessage("Page must be less than or equal to 10"),
-  query("size")
+  query("page")
     .optional()
     .isInt({ min: 1 })
-    .withMessage("Size must be greater than or equal to 1"),
+    .withMessage("Page must be greater than or equal to 1"),
   query("size")
     .optional()
     .isInt({ max: 20 })
     .withMessage("Size must be less than or equal to 20"),
-  query("name")
+  query("size")
     .optional()
-    .notEmpty()
-    .isString()
-    .withMessage("Name must be a string"),
+    .isInt({ min: 1 })
+    .withMessage("Size must be greater than or equal to 1"),
+  query("name").optional().notEmpty().withMessage("Name must be a string"),
   query("type")
     .optional()
     .isIn(["Online", "In Person", "in person", "In person", "online"])
     .withMessage("Type must be 'Online' or 'In Person'"),
   query("startDate")
     .optional()
-    // .isISO8601()
-    .isDate()
+    .isISO8601()
+    // .isDate()
     .withMessage("Start date must be a valid datetime"),
   handleValidationErrors,
 ];

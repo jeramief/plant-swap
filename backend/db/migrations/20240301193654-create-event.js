@@ -50,8 +50,8 @@ module.exports = {
           type: Sequelize.INTEGER,
         },
         price: {
-          allowNull: false,
-          type: Sequelize.FLOAT,
+          // allowNull: false,
+          type: Sequelize.DECIMAL(6, 2),
         },
         startDate: {
           allowNull: false,

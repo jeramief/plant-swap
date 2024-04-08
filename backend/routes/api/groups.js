@@ -45,8 +45,6 @@ router.get("/", async (req, res) => {
       include: { model: Membership },
     });
 
-    console.log({ numAttending, imageUrl });
-
     if (imageUrl) {
       previewImage = imageUrl.url;
     }
@@ -60,8 +58,8 @@ router.get("/", async (req, res) => {
       private: group.private,
       city: group.city,
       state: group.state,
-      createdAt: group.createdAt,
-      updatedAt: group.updatedAt,
+      createdAt: group.createdAt.toString(),
+      updatedAt: group.updatedAt.toString(),
       numAttending,
       previewImage,
     };
@@ -113,8 +111,6 @@ router.get("/current", requireAuth, async (req, res) => {
       include: { model: Membership },
     });
 
-    console.log({ numAttending, imageUrl });
-
     if (imageUrl) {
       previewImage = imageUrl.url;
     }
@@ -128,8 +124,8 @@ router.get("/current", requireAuth, async (req, res) => {
       private: group.private,
       city: group.city,
       state: group.state,
-      createdAt: group.createdAt,
-      updatedAt: group.updatedAt,
+      createdAt: group.createdAt.toString(),
+      updatedAt: group.updatedAt.toString(),
       numAttending,
       previewImage,
     };
@@ -294,8 +290,8 @@ router.get("/:groupId/events", async (req, res, next) => {
       venueId: event.venueId,
       name: event.name,
       type: event.type,
-      startDate: event.startDate,
-      endDate: event.endDate,
+      startDate: event.startDate.toString(),
+      endDate: event.endDate.toString(),
       numAttending,
       previewImage: event.previewImage,
       Group: event.Group,
@@ -386,8 +382,8 @@ router.post("/", [requireAuth, validateGroup], async (req, res) => {
     private: newGroup.private,
     city: newGroup.city,
     state: newGroup.state,
-    createdAt: newGroup.createdAt,
-    updatedAt: newGroup.updatedAt,
+    createdAt: newGroup.createdAt.toString(),
+    updatedAt: newGroup.updatedAt.toString(),
   });
 });
 
@@ -471,8 +467,6 @@ router.post(
       lat,
       lng,
     });
-
-    console.log({ newGroupVenue });
 
     res.json({
       id: newGroupVenue.id,
@@ -666,8 +660,8 @@ router.put("/:groupId", requireAuth, validateGroup, async (req, res, next) => {
     private: group.private,
     city: group.city,
     state: group.state,
-    createdAt: group.createdAt,
-    updatedAt: group.updatedAt,
+    createdAt: group.createdAt.toString(),
+    updatedAt: group.updatedAt.toString(),
   });
 });
 

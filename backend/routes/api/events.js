@@ -91,8 +91,8 @@ router.get("/", validateQuery, async (req, res) => {
       venueId: event.venueId,
       name: event.name,
       type: event.type,
-      startDate: event.startDate,
-      endDate: event.endDate,
+      startDate: event.startDate.toString(),
+      endDate: event.endDate.toString(),
       numAttending,
       previewImage: event.previewImage,
       Group: event.Group,
@@ -159,7 +159,22 @@ router.get("/:eventId", async (req, res, next) => {
     },
   });
 
-  res.json({ ...event, EventImages: eventImages, numAttending });
+  res.json({
+    id: event.id,
+    groupId: event.groupId,
+    venueId: event.venueId,
+    name: event.name,
+    description: event.description,
+    type: event.type,
+    capacity: event.capacity,
+    price: event.price + "0",
+    startDate: event.startDate,
+    endDate: event.endDate,
+    Group: event.Group,
+    Venue: event.Venue,
+    EventImages: eventImages,
+    numAttending,
+  });
 });
 
 // Get all Attendees of an Event specified by its id
@@ -417,10 +432,10 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res, next) => {
     name: event.name,
     type: event.type,
     capacity: event.capacity,
-    price: event.price,
+    price: event.price + "0",
     description: event.description,
-    startDate: event.startDate,
-    endDate: event.endDate,
+    startDate: event.startDate.toString(),
+    endDate: event.endDate.toString(),
   });
 });
 
