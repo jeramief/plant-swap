@@ -16,7 +16,7 @@ module.exports = {
           groupId: 2,
           venueId: 1,
           name: "Evening Tennis on the Water",
-          type: "In person",
+          type: "In Person",
           capacity: "10",
           price: 10.5,
           description:
@@ -28,7 +28,7 @@ module.exports = {
           groupId: 1,
           venueId: 3,
           name: "Car Show",
-          type: "In person",
+          type: "In Person",
           capacity: "10",
           price: 10.5,
           description:
@@ -40,7 +40,7 @@ module.exports = {
           groupId: 1,
           venueId: 1,
           name: "Pool Party",
-          type: "In person",
+          type: "In Person",
           capacity: "10",
           price: 10.5,
           description:

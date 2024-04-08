@@ -729,7 +729,7 @@ router.put(
       status: updateMembership.status,
     };
 
-    res.json({ payload });
+    res.json(payload);
   }
 );
 
