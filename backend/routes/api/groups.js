@@ -147,7 +147,7 @@ router.get("/current", requireAuth, async (req, res) => {
 // get Group details by id - route: /api/groups/:groupId
 router.get("/:groupId", async (req, res, next) => {
   const group = await Group.findByPk(req.params.groupId, {
-    attributes: { exclude: ["previewImage"] },
+    // attributes: { exclude: ["previewImage"] },
     include: [
       {
         model: GroupImage,
@@ -181,7 +181,7 @@ router.get("/:groupId", async (req, res, next) => {
   });
 
   const payload = {
-    ...group,
+    ...group.toJSON(),
   };
   payload.numMembers = memberCount;
 

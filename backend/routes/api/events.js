@@ -154,7 +154,7 @@ router.get("/:eventId", async (req, res, next) => {
     include: {
       model: Attendance,
       where: {
-        groupId: event.groupId,
+        eventId: event.id,
       },
     },
   });

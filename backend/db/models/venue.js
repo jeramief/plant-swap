@@ -26,8 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       address: DataTypes.STRING,
       city: DataTypes.STRING,
       state: DataTypes.STRING,
-      lat: DataTypes.DECIMAL,
-      lng: DataTypes.DECIMAL,
+      lat: DataTypes.FLOAT,
+      lng: DataTypes.FLOAT,
     },
     {
       sequelize,

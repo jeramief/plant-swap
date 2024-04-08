@@ -169,14 +169,22 @@ const validateQuery = [
     .optional()
     .isInt({ min: 1 })
     .withMessage("Page must be greater than or equal to 1"),
+  query("page")
+    .optional()
+    .isInt({ max: 10 })
+    .withMessage("Page must be less than or equal to 10"),
   query("size")
     .optional()
     .isInt({ min: 1 })
     .withMessage("Size must be greater than or equal to 1"),
+  query("size")
+    .optional()
+    .isInt({ max: 20 })
+    .withMessage("Size must be less than or equal to 20"),
   query("name").optional().isString().withMessage("Name must be a string"),
   query("type")
     .optional()
-    .isIn(["Online", "In Person"])
+    .isIn(["Online", "In Person", "in person", "In person", "online"])
     .withMessage("Type must be 'Online' or 'In Person'"),
   query("startDate")
     .optional()
