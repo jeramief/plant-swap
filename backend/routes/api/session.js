@@ -63,6 +63,7 @@ router.post("/", validateLogin, async (req, res, next) => {
   });
 });
 
+// logout
 router.delete("/", (_req, res) => {
   res.clearCookie("token");
   return res.json({ message: "success" });

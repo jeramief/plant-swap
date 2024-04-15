@@ -40,7 +40,7 @@ router.get("/", async (req, res) => {
       },
       attributes: ["url"],
     });
-    const numAttending = await Group.count({
+    const numMembers = await Group.count({
       where: { id: group.id },
       include: { model: Membership },
     });
@@ -60,7 +60,7 @@ router.get("/", async (req, res) => {
       state: group.state,
       createdAt: group.createdAt.toString(),
       updatedAt: group.updatedAt.toString(),
-      numAttending,
+      numMembers,
       previewImage,
     };
 
