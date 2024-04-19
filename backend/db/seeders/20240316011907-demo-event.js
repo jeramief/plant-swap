@@ -13,8 +13,32 @@ module.exports = {
     await Event.bulkCreate(
       [
         {
-          groupId: 2,
+          groupId: 1,
           venueId: 1,
+          name: "Valid Data Group First Data Creation Event",
+          type: "Online",
+          capacity: 10,
+          price: 18.5,
+          description:
+            "The first event creation for our group! Come say hello world!",
+          startDate: "2030-11-22 20:00:00",
+          endDate: "2030-11-22 21:00:00",
+        },
+        {
+          groupId: 1,
+          venueId: 2,
+          name: "Valid Data Group Second Data Creation Event",
+          type: "In person",
+          capacity: 10,
+          price: 18.5,
+          description:
+            "The second event creation for our group! Come say hello world again!",
+          startDate: "2030-10-22 20:00:00",
+          endDate: "2030-10-22 21:00:00",
+        },
+        {
+          groupId: 3,
+          venueId: 3,
           name: "Evening Tennis on the Water",
           type: "In Person",
           capacity: "10",
@@ -25,8 +49,8 @@ module.exports = {
           endDate: "2021-11-19 22:00:00",
         },
         {
-          groupId: 1,
-          venueId: 3,
+          groupId: 2,
+          venueId: 5,
           name: "Car Show",
           type: "In Person",
           capacity: "10",
@@ -37,8 +61,8 @@ module.exports = {
           endDate: "2021-11-19 22:00:00",
         },
         {
-          groupId: 1,
-          venueId: 1,
+          groupId: 2,
+          venueId: 3,
           name: "Pool Party",
           type: "In Person",
           capacity: "10",

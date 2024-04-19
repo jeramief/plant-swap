@@ -11,22 +11,32 @@ if (process.env.NODE_ENV === "production") {
 const attendances = [
   {
     eventId: 1,
-    userId: 1,
+    userId: 2,
+    status: "attending",
+  },
+  {
+    eventId: 2,
+    userId: 3,
     status: "attending",
   },
   {
     eventId: 3,
-    userId: 2,
+    userId: 6,
+    status: "attending",
+  },
+  {
+    eventId: 5,
+    userId: 7,
     status: "waitlist",
   },
   {
-    eventId: 1,
-    userId: 3,
+    eventId: 3,
+    userId: 8,
     status: "pending",
   },
   {
-    eventId: 3,
-    userId: 3,
+    eventId: 5,
+    userId: 8,
     status: "pending",
   },
 ];

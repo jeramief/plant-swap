@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import * as sessionActions from '../../store/session';
-import { useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
-import './LoginForm.css';
+import { useState } from "react";
+import * as sessionActions from "../../store/session";
+import { useDispatch } from "react-redux";
+import { useModal } from "../../context/Modal";
+import "./LoginForm.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -23,10 +23,26 @@ function LoginFormModal() {
         }
       });
   };
+  const handleDemo = (e) => {
+    e.preventDefault();
+    return dispatch(
+      sessionActions.login({ credential: "Demo-lition", password: "password" })
+    )
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  };
 
   return (
     <>
       <h1>Log In</h1>
+      <form onSubmit={handleDemo}>
+        <button type="submit">Log In as Demo User</button>
+      </form>
       <form onSubmit={handleSubmit}>
         <label>
           Username or Email

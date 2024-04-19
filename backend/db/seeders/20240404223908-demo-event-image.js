@@ -11,16 +11,26 @@ if (process.env.NODE_ENV === "production") {
 const eventImages = [
   {
     eventId: 1,
-    url: "image url",
+    url: "image.url",
     preview: true,
   },
   {
     eventId: 2,
+    url: "co-image.url",
+    preview: true,
+  },
+  {
+    eventId: 3,
     url: "image url",
     preview: true,
   },
   {
-    eventId: 1,
+    eventId: 4,
+    url: "image url",
+    preview: true,
+  },
+  {
+    eventId: 3,
     url: "image url",
     preview: false,
   },

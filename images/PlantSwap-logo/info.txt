@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: ArimaKoshi-Medium
+font link: https://fonts.google.com/specimen/Arima+Madurai
+font author: NDISCOVER
+font author site: http://www.ndiscovered.com/
+
+
+icon designer: Matt Brooks
+icon designer link: /Mattebrooks
+        
+{"bg":"#353922","icon":"#98D82C","font":"#FFFFFF","slogan":"#ffffff"}
+      

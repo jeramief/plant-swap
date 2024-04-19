@@ -11,8 +11,13 @@ if (process.env.NODE_ENV === "production") {
 const groupImages = [
   {
     groupId: 1,
-    url: "image url",
+    url: "image.url",
     preview: true,
+  },
+  {
+    groupId: 1,
+    url: "image2.url",
+    preview: false,
   },
   {
     groupId: 2,
@@ -20,7 +25,12 @@ const groupImages = [
     preview: true,
   },
   {
-    groupId: 1,
+    groupId: 3,
+    url: "image url",
+    preview: true,
+  },
+  {
+    groupId: 2,
     url: "image url",
     preview: false,
   },

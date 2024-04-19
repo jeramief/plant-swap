@@ -13,6 +13,16 @@ module.exports = {
       [
         {
           organizerId: 1,
+          name: "The Valid Data Group",
+          about:
+            "Enjoy several rounds of valid data being sent and stored in a database",
+          type: "Online",
+          private: true,
+          city: "San Frangoodtogo",
+          state: "CA",
+        },
+        {
+          organizerId: 6,
           name: "Evening Tennis on the Water",
           about:
             "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
@@ -22,7 +32,7 @@ module.exports = {
           state: "NY",
         },
         {
-          organizerId: 3,
+          organizerId: 8,
           name: "Car Show",
           about:
             "Show off your coolest ridesShow off your coolest ridesShow off your coolest rides.",
@@ -32,7 +42,7 @@ module.exports = {
           state: "San Andreas",
         },
         {
-          organizerId: 1,
+          organizerId: 6,
           name: "Pool Party",
           about:
             "Pool party, nothing too specialPool party, nothing too specialPool party, nothing too special.",

@@ -1,0 +1,13 @@
+section {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10%;
+}
+
+.sectionOne {
+  display: flex;
+}
+
+.sectionOne-left {
+  width: 50%;
+}
