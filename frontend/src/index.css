@@ -1,1 +1,8 @@
 /* TODO: Add sitewide styles */
+* {
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}

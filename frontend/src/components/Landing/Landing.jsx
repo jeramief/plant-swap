@@ -1,16 +1,14 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "./Landing.css";
 
 function Landing() {
-  const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.session.user);
+  const sessionUser = useSelector((state) => state.session.user);
 
   return (
-    <section>
-      <div className="section-one">
-        <div className="section-one-left">
+    <section className="landing-page-container">
+      <div className="landing-page-banner-container">
+        <div className="landing-page-text-container">
           <h1>Section 1</h1>
           <p>
             Lorem, ipsum dolor sit amet consectetur adipisicing elit.
@@ -22,30 +20,37 @@ function Landing() {
         <img src="img" alt="Section 1 image" />
       </div>
 
-      <div className="section-two">
+      <div className="landing-page-info-container">
         <h3>Section 2</h3>
         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
       </div>
 
-      <div className="section-three">
-        <div className="go-to-groups">
+      <div className="landing-page-groups-and-events-container">
+        <div className="go-to-groups-container">
           <img src="" alt="section 3 image" />
-          <Link>See all groups</Link>
+          <Link to="/groups">See all groups</Link>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
-        <div className="go-to-events">
+        <div className="go-to-events-container">
           <img src="" alt="section 3 image" />
           <Link>Find an event</Link>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
-        <div className="start-group">
+        <div className="start-group-container">
           <img src="" alt="section 3 image" />
-          <Link>Start a group</Link>
+
+          {/* prevents a non active user from creating a group */}
+          <Link
+            to={"/groups/new"}
+            onClick={(e) => (!sessionUser ? e.preventDefault() : null)}
+          >
+            Start a group
+          </Link>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
       </div>
 
-      <div className="sectionFour">
+      <div className="landing-page-join-button-container">
         <button>Join PlantSwap</button>
       </div>
     </section>
