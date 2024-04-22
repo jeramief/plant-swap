@@ -1,14 +1,20 @@
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import "./Groups.css";
 import { getAllGroups } from "../../store/groupsReducer";
+// import { getAllEvents } from "../../store/eventsReducer";
+import Group from "./Group";
+import "./Groups.css";
+
+// import './ListIndex.css';
+// import GroupItem from '../GroupItem';
+// import EventItem from '../EventItem';
 
 const GroupsList = () => {
   const dispatch = useDispatch();
-  const groups = useSelector((state) => state.groupsState.Groups);
-  //   const groups = Object.values(state);
-  console.log(groups);
+  const groupsState = useSelector((state) => state.groupsState);
+  const groups = Object.values(groupsState);
+  // console.log(groups);
 
   useEffect(() => {
     dispatch(getAllGroups());
@@ -20,7 +26,7 @@ const GroupsList = () => {
         <NavLink>
           <h2>Events</h2>
         </NavLink>
-        <NavLink isActive>
+        <NavLink>
           <h2>Groups</h2>
         </NavLink>
       </div>
@@ -28,32 +34,17 @@ const GroupsList = () => {
         <p>Groups in Meetup</p>
       </div>
       <ul>
-        {groups?.map((group) => (
-          <li key={group.id} className="group-container">
-            <div className="group-image">
-              <img src={group.previewImage} alt="Group Image" />
-            </div>
-            <div>
-              <h3>{group.name}</h3>
-              <p>
-                Location: {group.city}, {group.state}
-              </p>
-              <p>Description: {group.about}</p>
-              <div>
-                <span>{"# of Events"}</span>
-                <span> &bull; </span>
-                <span>{group.private ? "Private" : "Public"}</span>
-              </div>
-            </div>
+        {/* {groups?.map((group) => (
+          <li key={group.id}>
+            <Group groupData={group} />
           </li>
-        ))}
-        {/* {groups &&
-          groups.map((group) => {
-            <li className="group-container">
-              <img src={group.previewImage} alt="Group Image" />
-              <h3>{group.name}</h3>
-            </li>;
-          })} */}
+        ))} */}
+        {groups &&
+          groups.map((group) => (
+            <li key={group.id}>
+              <Group groupData={group} />
+            </li>
+          ))}
       </ul>
     </section>
   );

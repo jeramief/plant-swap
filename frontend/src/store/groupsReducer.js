@@ -25,14 +25,14 @@ export const getAllGroups = () => async (dispatch) => {
 
   if (response.ok) {
     const groups = await response.json();
-    // const normalizedGroups = {};
-    // groups.Groups.forEach((group) => (normalizedGroups[group.id] = group));
+    const normalizedGroups = {};
+    groups.Groups.forEach((group) => (normalizedGroups[group.id] = group));
     // const normalizedGroups = groups.Groups.reduce((acc, c) => {
     //   acc[c.id] = c;
     //   return acc;
     // });
 
-    dispatch(loadGroups(groups));
+    dispatch(loadGroups(normalizedGroups));
   } else {
     const errors = await response.json();
     console.log(errors);
