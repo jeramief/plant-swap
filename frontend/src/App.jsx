@@ -7,8 +7,13 @@ import Navigation from "./components/Navigation/Navigation-bonus";
 import * as sessionActions from "./store/session";
 import { Modal } from "./context/Modal";
 import Landing from "./components/Landing";
-import GroupsList from "./components/Groups/GroupsList";
-import GroupDetails from "./components/Groups/GroupDetails";
+import ListsIndex from "./components/ListsIndex";
+
+// import CreateGroup from './components/CreateGroup';
+// import CreateEvent from './components/CreateEvent';
+// import EventShow from './components/EventShow';
+// import GroupShow from './components/GroupShow';
+// import UpdateGroup from './components/UpdateGroup';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -39,16 +44,33 @@ const router = createBrowserRouter([
       },
       {
         path: "groups",
-        element: <GroupsList />,
+        element: <ListsIndex type="group" />,
       },
+      // {
+      //   path:'groups/new',
+      //   element:<CreateGroup/>
+      // },
+      // {
+      //   path:'groups/:groupId',
+      //   element:<GroupDetails/>
+      // },
+      // {
+      //   path:'groups/:groupId/edit',
+      //   element:<GroupDetails/>
+      // },
       {
         path: "events",
-        element: <GroupsList />,
+        element: <ListsIndex type="event" />,
       },
-      {
-        path: "groups/:groupId",
-        element: <GroupDetails />,
-      },
+      // {
+      //   path: "events",
+      //   element: <ListsIndex type="event" />,
+      // },
+      // {
+      //   path:'groups/:groupId/events/new',
+      //   element:<GroupDetails/>
+      // },
+
       // {
       //   path: 'login',
       //   element: <LoginFormPage />
