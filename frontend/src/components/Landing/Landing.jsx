@@ -33,7 +33,7 @@ function Landing() {
         </div>
         <div className="go-to-events-container">
           <img src="" alt="section 3 image" />
-          <Link>Find an event</Link>
+          <Link to="/events">Find an event</Link>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
         <div className="start-group-container">

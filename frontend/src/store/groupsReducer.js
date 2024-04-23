@@ -27,7 +27,6 @@ export const getAllGroups = () => async (dispatch) => {
 
   if (response.ok) {
     const groups = await response.json();
-
     dispatch(loadGroups(groups));
   } else {
     const errors = await response.json();
@@ -112,7 +111,7 @@ function groupsReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_GROUPS: {
       const newState = { ...state };
-      action.groups.forEach((group) => (newState[group.id] = group));
+      action.groups.Groups.forEach((group) => (newState[group.id] = group));
       return newState;
     }
     case DELETE_GROUP: {

@@ -7,7 +7,7 @@
 }
 /* TEMPORARY IMAGE PLACEHOLDERS */
 
-.groups-list-container {
+.list-container {
   display: flex;
   flex-direction: column;
   padding: 0 20%;
