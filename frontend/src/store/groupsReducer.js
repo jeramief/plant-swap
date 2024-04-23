@@ -6,7 +6,7 @@ const headers = {
 
 const LOAD_GROUPS = "groups/loadGroups";
 const DELETE_GROUP = "groups/removeGroup";
-const ADD_GROUP_EVENTS = "groups/addGroupEvents";
+const GET_GROUP_EVENTS = "groups/getGroupEvents";
 
 const loadGroups = (groups) => ({
   type: LOAD_GROUPS,
@@ -16,8 +16,8 @@ const removeGroup = (groupId) => ({
   type: DELETE_GROUP,
   groupId,
 });
-const addGroupEvents = (groupId, events) => ({
-  type: ADD_GROUP_EVENTS,
+const getGroupEvents = (groupId, events) => ({
+  type: GET_GROUP_EVENTS,
   groupId,
   events,
 });
@@ -27,7 +27,7 @@ export const getAllGroups = () => async (dispatch) => {
 
   if (response.ok) {
     const groups = await response.json();
-    dispatch(loadGroups(groups));
+    dispatch(loadGroups(groups.Groups));
   } else {
     const errors = await response.json();
     console.log(errors);
@@ -46,12 +46,12 @@ export const getGroupById = (groupId) => async (dispatch) => {
     return errors;
   }
 };
-export const getGroupEvents = (groupId) => async (dispatch) => {
+export const getAllGroupEvents = (groupId) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}/events`);
 
   if (response.ok) {
     const { Events: events } = await response.json();
-    dispatch(addGroupEvents(+groupId, events));
+    dispatch(getGroupEvents(+groupId, events));
   } else {
     const errors = await response.json();
     console.log(errors);
@@ -111,7 +111,7 @@ function groupsReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_GROUPS: {
       const newState = { ...state };
-      action.groups.Groups.forEach((group) => (newState[group.id] = group));
+      action.groups.forEach((group) => (newState[group.id] = group));
       return newState;
     }
     case DELETE_GROUP: {
@@ -121,7 +121,7 @@ function groupsReducer(state = initialState, action) {
       delete newState[action.groupId];
       return newState;
     }
-    case ADD_GROUP_EVENTS: {
+    case GET_GROUP_EVENTS: {
       if (state[action.groupId] === undefined) return state;
 
       const newState = { ...state };

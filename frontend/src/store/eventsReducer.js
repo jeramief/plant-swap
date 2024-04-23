@@ -4,14 +4,13 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-const ADD_EVENTS = "events/addEvents";
+const LOAD_EVENTS = "events/loadEvents";
 const DELETE_EVENT = "events/removeEvent";
 
-const addEvents = (events) => ({
-  type: ADD_EVENTS,
+const loadEvents = (events) => ({
+  type: LOAD_EVENTS,
   events,
 });
-
 const removeEvent = (eventId) => ({
   type: DELETE_EVENT,
   eventId,
@@ -22,7 +21,7 @@ export const getAllEvents = () => async (dispatch) => {
 
   if (response.ok) {
     const { Events: events } = await response.json();
-    dispatch(addEvents(events));
+    dispatch(loadEvents(events));
   } else {
     const errors = await response.json();
     console.log(errors);
@@ -34,7 +33,7 @@ export const getEventById = (eventId) => async (dispatch) => {
 
   if (response.ok) {
     const event = await response.json();
-    dispatch(addEvents([event]));
+    dispatch(loadEvents([event]));
   } else {
     const errors = await response.json();
     console.log(errors);
@@ -50,7 +49,7 @@ export const newEvent = (groupId, event) => async (dispatch) => {
 
   if (response.ok) {
     const newEvent = await response.json();
-    dispatch(addEvents([newEvent]));
+    dispatch(loadEvents([newEvent]));
   } else {
     const errors = await response.json();
     console.log(errors);
@@ -91,7 +90,7 @@ const initialState = {};
 
 function eventsReducer(state = initialState, action) {
   switch (action.type) {
-    case ADD_EVENTS: {
+    case LOAD_EVENTS: {
       const newState = { ...state };
       action.events.forEach((event) => (newState[event.id] = event));
       return newState;

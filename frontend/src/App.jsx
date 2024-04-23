@@ -8,6 +8,7 @@ import * as sessionActions from "./store/session";
 import { Modal } from "./context/Modal";
 import Landing from "./components/Landing";
 import ListsIndex from "./components/ListsIndex";
+import GroupDetails from "./components/GroupDetails/GroupDetails";
 
 // import CreateGroup from './components/CreateGroup';
 // import CreateEvent from './components/CreateEvent';
@@ -50,10 +51,10 @@ const router = createBrowserRouter([
       //   path:'groups/new',
       //   element:<CreateGroup/>
       // },
-      // {
-      //   path:'groups/:groupId',
-      //   element:<GroupDetails/>
-      // },
+      {
+        path: "groups/:groupId",
+        element: <GroupDetails />,
+      },
       // {
       //   path:'groups/:groupId/edit',
       //   element:<GroupDetails/>
