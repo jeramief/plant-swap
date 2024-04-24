@@ -10,7 +10,7 @@ const DeleteGroupModal = ({ groupId }) => {
   const { closeModal } = useModal();
 
   const submitDelete = async () => {
-    const response = dispatch(deleteGroup(groupId));
+    const response = await dispatch(deleteGroup(groupId));
 
     if (response.ok) {
       console.log("Successfully deleted");

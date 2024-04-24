@@ -105,7 +105,7 @@ export const newGroupImage = (groupId, image) => async () => {
       body: JSON.stringify(image),
     });
 
-    return response;
+    return response.json();
   } catch (errors) {
     console.log(errors);
     return errors;

@@ -13,32 +13,11 @@ const GroupCreate = () => {
   const [about, setAbout] = useState("");
   const [type, setType] = useState("");
   const [isPrivate, setIsPrivate] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(
+    "https://picsum.photos/seed/picsum/200/300"
+  );
   const [formErrors, setFormErrors] = useState([]);
   const [validations, setValidations] = useState({});
-  //   const [submitted, setSubmitted] = useState(false);
-
-  //   function validateInputs() {
-  //     const validationErrors = {};
-
-  //     if (!location) validationErrors.location = "Location is required";
-  //     else if (!location.includes(", ") || location.split(", ")[1].length < 2)
-  //       validationErrors.location = "State is required";
-
-  //     if (!name) validationErrors.name = "Name is required";
-  //     else if (name.length > 60)
-  //       validationErrors.name = "Name must be 60 characters or less";
-
-  //     if (about.length < 50)
-  //       validationErrors.about = "Description must be at least 50 characters";
-  //     if (!type) validationErrors.type = "Group type is required";
-  //     if (!isPrivate) validationErrors.isPrivate = "Group privacy is required";
-  //     if (!imageUrl) validationErrors.imageUrl = "Group image is required";
-
-  //     setFormErrors(validationErrors);
-
-  //     return !Object.keys(validationErrors).length;
-  //   }
 
   useEffect(() => {
     const errorsArray = [];
@@ -112,18 +91,16 @@ const GroupCreate = () => {
       return;
     }
 
-    // console.log('New Group', newGroup);
+    const newImage = await dispatch(newGroupImage(newGroup.id, image));
 
-    // const newImage = await dispatch(saveGroupImage(newGroup.id, image));
+    if (!newImage?.id) {
+      const { errors } = await newImage.json();
+      console.log("Error Response", errors);
+      setFormErrors(errors);
+      return;
+    }
 
-    // if (!newImage.id) {
-    //   const { errors } = await newImage.json();
-    //   // console.log('Error Response', errors);
-    //   setErrors(errors);
-    //   return;
-    // }
-
-    // console.log('Group Image', newImage);
+    console.log("Group Image", newImage);
 
     navigate(`/groups/${newGroup.id}`);
   }
