@@ -5,6 +5,7 @@ import { getGroupById, getAllGroupEvents } from "../../store";
 import "./GroupDetails";
 
 import OpenModalButton from "../OpenModalButton";
+import DeleteGroupModal from "../DeleteGroupModal";
 import EventCard from "../EventCard";
 import Breadcrumb from "../Breadcrumb/Breadcrumb";
 
@@ -43,7 +44,7 @@ const GroupDetails = () => {
     navigate(`/groups/${groupId}/events/new`);
   };
   const updateGroup = () => {
-    navigate(`/groups/${groupId}/edite`);
+    navigate(`/groups/${groupId}/edit`);
   };
 
   return (
