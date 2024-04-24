@@ -1,9 +1,5 @@
 import { csrfFetch } from "./csrf";
 
-const headers = {
-  "Content-Type": "application/json",
-};
-
 const LOAD_GROUPS = "groups/loadGroups";
 const DELETE_GROUP = "groups/removeGroup";
 const GET_GROUP_EVENTS = "groups/getGroupEvents";
@@ -23,83 +19,94 @@ const getGroupEvents = (groupId, events) => ({
 });
 
 export const getAllGroups = () => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups`);
-
-  if (response.ok) {
+  try {
+    const response = await csrfFetch(`/api/groups`);
     const groups = await response.json();
     dispatch(loadGroups(groups.Groups));
-  } else {
-    const errors = await response.json();
+  } catch (errors) {
     console.log(errors);
     return errors;
   }
 };
 export const getGroupById = (groupId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}`);
+  try {
+    const response = await csrfFetch(`/api/groups/${groupId}`);
 
-  if (response.ok) {
     const group = await response.json();
     dispatch(loadGroups([group]));
-  } else {
-    const errors = await response.json();
+  } catch (errors) {
     console.log(errors);
     return errors;
   }
 };
 export const getAllGroupEvents = (groupId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}/events`);
+  try {
+    const response = await csrfFetch(`/api/groups/${groupId}/events`);
 
-  if (response.ok) {
     const { Events: events } = await response.json();
     dispatch(getGroupEvents(+groupId, events));
-  } else {
-    const errors = await response.json();
+  } catch (errors) {
     console.log(errors);
     return errors;
   }
 };
 export const createGroup = (group) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(group),
-  });
+  try {
+    // console.log({ group });
 
-  if (response.ok) {
+    const response = await csrfFetch("/api/groups", {
+      method: "POST",
+      body: JSON.stringify(group),
+    });
+
+    console.log({ response });
+
     const newGroup = await response.json();
+    console.log(newGroup);
     dispatch(loadGroups([newGroup]));
-  } else {
-    const errors = await response.json();
-    console.log(errors);
+    return newGroup;
+  } catch (errors) {
+    console.log({ errors });
     return errors;
   }
 };
 export const updateGroup = (groupId, group) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}`, {
-    method: "PUT",
-    headers,
-    body: JSON.stringify(group),
-  });
+  try {
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+      method: "PUT",
+      body: JSON.stringify(group),
+    });
 
-  if (response.ok) {
     const newGroup = await response.json();
     dispatch(loadGroups([newGroup]));
     return newGroup;
-  } else {
-    const errors = await response.json();
+  } catch (errors) {
     console.log(errors);
     return errors;
   }
 };
 export const deleteGroup = (groupId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}`, {
-    method: "DELETE",
-  });
+  try {
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+      method: "DELETE",
+    });
 
-  if (response.ok) {
     dispatch(removeGroup(+groupId));
-  } else {
-    const errors = await response.json();
+    return response;
+  } catch (errors) {
+    console.log(errors);
+    return errors;
+  }
+};
+export const newGroupImage = (groupId, image) => async () => {
+  try {
+    const response = await csrfFetch(`/api/groups/${groupId}/images`, {
+      method: "POST",
+      body: JSON.stringify(image),
+    });
+
+    return response;
+  } catch (errors) {
     console.log(errors);
     return errors;
   }

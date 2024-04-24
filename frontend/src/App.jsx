@@ -9,6 +9,7 @@ import { Modal } from "./context/Modal";
 import Landing from "./components/Landing";
 import ListsIndex from "./components/ListsIndex";
 import GroupDetails from "./components/GroupDetails/GroupDetails";
+import GroupCreate from "./components/GroupCreate/GroupCreate";
 
 // import CreateGroup from './components/CreateGroup';
 // import CreateEvent from './components/CreateEvent';
@@ -47,10 +48,10 @@ const router = createBrowserRouter([
         path: "groups",
         element: <ListsIndex type="group" />,
       },
-      // {
-      //   path:'groups/new',
-      //   element:<CreateGroup/>
-      // },
+      {
+        path: "groups/new",
+        element: <GroupCreate />,
+      },
       {
         path: "groups/:groupId",
         element: <GroupDetails />,

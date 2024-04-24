@@ -63,10 +63,10 @@ export const newEventImage = (eventId, image) => async (/*dispatch*/) => {
     body: JSON.stringify(image),
   });
 
-  if (response.ok) {
-    // const newImage = await response.json();
-    // dispatch(getGroupById(groupId));
-  } else {
+  // if (response.ok) {
+  //   // const newImage = await response.json();
+  // } else {
+  if (!response.ok) {
     const errors = await response.json();
     console.log(errors);
     return errors;
