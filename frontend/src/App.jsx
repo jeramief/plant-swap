@@ -11,6 +11,8 @@ import ListsIndex from "./components/ListsIndex";
 import GroupDetails from "./components/GroupDetails/GroupDetails";
 import GroupCreate from "./components/GroupCreate/GroupCreate";
 import GroupUpdate from "./components/GroupUpdate";
+import EventCreate from "./components/EventCreate";
+import EventDetails from "./components/EventDetails";
 
 // import CreateGroup from './components/CreateGroup';
 // import CreateEvent from './components/CreateEvent';
@@ -65,14 +67,14 @@ const router = createBrowserRouter([
         path: "events",
         element: <ListsIndex type="event" />,
       },
-      // {
-      //   path: "events",
-      //   element: <ListsIndex type="event" />,
-      // },
-      // {
-      //   path:'groups/:groupId/events/new',
-      //   element:<GroupDetails/>
-      // },
+      {
+        path: "events/:eventId",
+        element: <EventDetails type="event" />,
+      },
+      {
+        path: "groups/:groupId/events/new",
+        element: <EventCreate />,
+      },
 
       // {
       //   path: 'login',

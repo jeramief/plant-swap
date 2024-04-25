@@ -1,5 +1,5 @@
 /* TEMPORARY IMAGE PLACEHOLDERS */
-.landing-page-banner-container > img {
+/* .landing-page-banner-container > img {
   height: 300px;
   width: 45%;
   background-color: rgb(44, 117, 181);
@@ -12,7 +12,7 @@
   width: 90%;
   background-color: rgb(44, 117, 181);
   border: 2px solid red;
-}
+} */
 /* TEMPORARY IMAGE PLACEHOLDERS */
 
 .landing-page-container {
@@ -38,13 +38,13 @@
   align-items: center;
   text-align: center;
   width: 300px;
-  border: 2px solid red;
+  /* border: 2px solid red; */
   /* gap: 10px; */
 }
 
 .landing-page-info-container > * {
   margin: 0;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 
 .landing-page-groups-and-events-container {
@@ -53,7 +53,7 @@
 }
 
 .landing-page-groups-and-events-container > * {
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 
 .go-to-groups-container,

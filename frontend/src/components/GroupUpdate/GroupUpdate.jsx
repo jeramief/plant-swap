@@ -117,8 +117,8 @@ const GroupUpdate = () => {
         <div className="form-section">
           <h2>First, set your group&apos;s location.</h2>
           <p>
-            Venyou groups meet locally, in person and online. We&apos;ll connect
-            you with people in your area, and more can join you online.
+            PlantSwap groups meet locally, in person and online. We&apos;ll
+            connect you with people in your area, and more can join you online.
           </p>
           <input
             type="text"
