@@ -3,8 +3,9 @@ import {
   getAllGroups,
   getGroupById,
   getAllGroupEvents,
-  deleteGroup,
   createGroup,
+  updateGroup,
+  deleteGroup,
   newGroupImage,
 } from "./groupsReducer";
 import { getAllEvents } from "./eventsReducer";
@@ -15,6 +16,7 @@ export {
   getGroupById,
   getAllGroupEvents,
   createGroup,
+  updateGroup,
   deleteGroup,
   newGroupImage,
   getAllEvents,

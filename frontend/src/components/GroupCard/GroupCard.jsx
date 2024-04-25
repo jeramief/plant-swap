@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./GroupCard.css";
+import ShowImage from "../ShowImage";
 
 const GroupCard = ({ group }) => {
   const navigate = useNavigate();
@@ -10,7 +11,8 @@ const GroupCard = ({ group }) => {
 
   return (
     <div className="group-card" onClick={() => onClick(group.id)}>
-      <img src="" alt="" />
+      <ShowImage url={group.previewImage} type="cart" />
+
       <div className="content">
         <h3>{group.name}</h3>
         <p className="location">

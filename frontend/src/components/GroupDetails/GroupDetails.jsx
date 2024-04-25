@@ -8,6 +8,7 @@ import OpenModalButton from "../OpenModalButton";
 import DeleteGroupModal from "../DeleteGroupModal";
 import EventCard from "../EventCard";
 import Breadcrumb from "../Breadcrumb/Breadcrumb";
+import ShowImage from "../ShowImage";
 
 const GroupDetails = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const GroupDetails = () => {
 
   if (!group) return null;
   const { GroupImages, name, city, state, Organizer, about, Events } = group;
+  const url = GroupImages ? GroupImages[0]?.url : undefined;
   // console.log({ GroupImages, name, city, state, Organizer, about, Events });
 
   let upcomingEvents, pastEvents, numEvents;
@@ -50,6 +52,8 @@ const GroupDetails = () => {
   return (
     <div className="group-details">
       <Breadcrumb to="/groups">Groups</Breadcrumb>
+      <ShowImage url={url} type="hero" />
+
       <div className="hero">
         <div className="hero-image">
           <img src="" alt="" />

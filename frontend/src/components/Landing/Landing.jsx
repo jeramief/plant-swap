@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./Landing.css";
 
+const url = "https://picsum.photos/seed/picsum/200/300?grayscale";
+
+import ShowImage from "../ShowImage/ShowImage";
+
 function Landing() {
   const sessionUser = useSelector((state) => state.session.user);
 
@@ -17,7 +21,7 @@ function Landing() {
             voluptas laboriosam eius nobis quae consequuntur quam.
           </p>
         </div>
-        <img src="img" alt="Section 1 image" />
+        <ShowImage url={url} type="landing-page-hero" />
       </div>
 
       <div className="landing-page-info-container">
@@ -27,17 +31,17 @@ function Landing() {
 
       <div className="landing-page-groups-and-events-container">
         <div className="go-to-groups-container">
-          <img src="" alt="section 3 image" />
+          <ShowImage url={url} type="to-groups-list" />
           <Link to="/groups">See all groups</Link>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
         <div className="go-to-events-container">
-          <img src="" alt="section 3 image" />
+          <ShowImage url={url} type="to-events-list" />
           <Link to="/events">Find an event</Link>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
         <div className="start-group-container">
-          <img src="" alt="section 3 image" />
+          <ShowImage url={url} type="create-group" />
 
           {/* prevents a non active user from creating a group */}
           <Link

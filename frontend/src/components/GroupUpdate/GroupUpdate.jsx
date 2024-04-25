@@ -1,25 +1,43 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { createGroup, newGroupImage } from "../../store";
-import "./GroupCreate";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateGroup, getGroupById } from "../../store";
+import "./GroupUpdate.css";
 
-const GroupCreate = () => {
+const GroupUpdate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [location, setLocation] = useState("Indianapolis, IN");
+  const { groupId } = useParams();
+  const sessionUser = useSelector((state) => state.session.user);
+  const group = useSelector((state) => state.groupsState)[groupId];
+
+  const [location, setLocation] = useState("");
   const [name, setName] = useState("");
-  const [about, setAbout] = useState(
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatum ab provident doloremque quasi, fugiat incidunt saepe cupiditate, voluptas nesciunt perferendis reiciendis nulla sapiente adipisci dolorum unde expedita dolor debitis, in impedit omnis ipsa? Nihil accusantium error id consectetur, modi aliquid perferendis reiciendis unde asperiores quisquam rerum aperiam vero tempora, perspiciatis reprehenderit explicabo. Illo, itaque."
-  );
+  const [about, setAbout] = useState("");
   const [type, setType] = useState("");
   const [isPrivate, setIsPrivate] = useState("");
-  const [imageUrl, setImageUrl] = useState(
-    "https://picsum.photos/seed/picsum/200/300"
-  );
   const [formErrors, setFormErrors] = useState([]);
   const [validations, setValidations] = useState({});
+
+  useEffect(() => {
+    dispatch(getGroupById(groupId));
+  }, [dispatch, groupId]);
+
+  useEffect(() => {
+    if (!group) return;
+    setLocation(`${group.city}, ${group.state}`);
+    setName(group.name);
+    setAbout(group.about);
+    setType(group.type);
+    setIsPrivate(group.private.toString());
+  }, [group]);
+
+  useEffect(() => {
+    if (sessionUser === undefined || group === undefined) return;
+    if (sessionUser === null) navigate("/");
+    if (sessionUser.id !== group.organizerId) navigate("/");
+  }, [group, navigate, sessionUser]);
 
   useEffect(() => {
     const errorsArray = [];
@@ -50,14 +68,10 @@ const GroupCreate = () => {
       errorsArray.push("Group privacy is required");
       validationsObject.private = "Group privacy is required";
     }
-    if (!imageUrl) {
-      errorsArray.push("Group image is required");
-      validationsObject.imageUrl = "Group image is required";
-    }
 
     setFormErrors(errorsArray);
     setValidations(validationsObject);
-  }, [about, imageUrl, isPrivate, location, name, type]);
+  }, [about, isPrivate, location, name, type]);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -76,15 +90,10 @@ const GroupCreate = () => {
     };
     // console.log('Group', group);
 
-    const image = {
-      url: imageUrl,
-      preview: true,
-    };
+    const updateGroupInformation = await dispatch(updateGroup(groupId, group));
 
-    const newGroup = await dispatch(createGroup(group));
-
-    if (!newGroup.id) {
-      const { errors } = await newGroup.json();
+    if (!updateGroupInformation.id) {
+      const { errors } = await updateGroupInformation.json();
       if (errors.city) errors.location = errors.city;
       if (errors.state)
         errors.location = errors.location
@@ -95,37 +104,21 @@ const GroupCreate = () => {
       return;
     }
 
-    const newImage = await dispatch(newGroupImage(newGroup.id, image));
-
-    if (!newImage?.id) {
-      const { errors } = await newImage.json();
-      console.log("Error Response", errors);
-      setFormErrors(errors);
-      return;
-    }
-
-    console.log("Group Image", newImage);
-
-    navigate(`/groups/${newGroup.id}`);
+    navigate(`/groups/${updateGroupInformation.id}`);
   }
 
   return (
-    <div>
-      {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatum ab provident doloremque quasi, fugiat incidunt saepe cupiditate, voluptas nesciunt perferendis reiciendis nulla sapiente adipisci dolorum unde expedita dolor debitis, in impedit omnis ipsa? Nihil accusantium error id consectetur, modi aliquid perferendis reiciendis unde asperiores quisquam rerum aperiam vero tempora, perspiciatis reprehenderit explicabo. Illo, itaque. */}
-
+    <div className="create-group-page">
       <form onSubmit={onSubmit}>
         <div className="form-section">
-          <h3>START A NEW GROUP</h3>
-          <h2>
-            We&apos;ll walk you through a few steps to build your local
-            community
-          </h2>
+          <h3>UPDATE YOUR GROUP</h3>
+          <h2>We&apos;ll walk you through a few steps to update your group</h2>
         </div>
         <div className="form-section">
-          <h2>First, set your group&apos;s location</h2>
+          <h2>First, set your group&apos;s location.</h2>
           <p>
-            PlantSwap groups meet locally, in person and online. We&apos;ll
-            connect you with people in your area, and more can join you online.
+            Venyou groups meet locally, in person and online. We&apos;ll connect
+            you with people in your area, and more can join you online.
           </p>
           <input
             type="text"
@@ -204,21 +197,14 @@ const GroupCreate = () => {
             )}
           </div>
 
-          <p>Please add an image url for your group below:</p>
-          <input
-            type="text"
-            placeholder="Image Url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-          {validations.imageUrl && (
-            <p className="error">{validations.imageUrl}</p>
-          )}
+          {/* <p>Please add an image url for your group below:</p>
+                <input type="text" placeholder='Image Url' value={imageUrl} onChange={(e) => setImageUrl(e.target.value)}/>
+                {validations.imageUrl && <p className='error'>{validations.imageUrl}</p>} */}
         </div>
-        <button disabled={formErrors.length}>Create Group</button>
+        <button disabled={formErrors.length}>Update Group</button>
       </form>
     </div>
   );
 };
 
-export default GroupCreate;
+export default GroupUpdate;

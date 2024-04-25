@@ -10,6 +10,7 @@ import Landing from "./components/Landing";
 import ListsIndex from "./components/ListsIndex";
 import GroupDetails from "./components/GroupDetails/GroupDetails";
 import GroupCreate from "./components/GroupCreate/GroupCreate";
+import GroupUpdate from "./components/GroupUpdate";
 
 // import CreateGroup from './components/CreateGroup';
 // import CreateEvent from './components/CreateEvent';
@@ -56,10 +57,10 @@ const router = createBrowserRouter([
         path: "groups/:groupId",
         element: <GroupDetails />,
       },
-      // {
-      //   path:'groups/:groupId/edit',
-      //   element:<GroupDetails/>
-      // },
+      {
+        path: "groups/:groupId/edit",
+        element: <GroupUpdate />,
+      },
       {
         path: "events",
         element: <ListsIndex type="event" />,
