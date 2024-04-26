@@ -10,17 +10,22 @@ const DeleteGroupModal = ({ groupId }) => {
   const { closeModal } = useModal();
 
   const submitDelete = async () => {
-    const response = await dispatch(deleteGroup(groupId));
-
-    if (response.ok) {
-      console.log("Successfully deleted");
-      navigate("/groups");
-      closeModal();
-      return;
-    } else {
-      console.log("Error deleting group: ", response);
-      return;
-    }
+    await dispatch(deleteGroup(groupId))
+      .then(() => navigate(`/groups/${groupId}`))
+      .then(() => closeModal())
+      .catch((errors) => {
+        console.log("Delete event errors: ", errors);
+      });
+    //   const response = await dispatch(deleteGroup(groupId));
+    // if (response.ok) {
+    //   console.log("Successfully deleted");
+    //   navigate("/groups");
+    //   closeModal();
+    //   return;
+    // } else {
+    //   console.log("Error deleting group: ", response);
+    //   return;
+    // }
   };
 
   return (

@@ -34,40 +34,39 @@ export const getEventById = (eventId) => async (dispatch) => {
   if (response.ok) {
     const event = await response.json();
     dispatch(loadEvents([event]));
+    console.log("event from thunk", event);
   } else {
     const errors = await response.json();
     console.log(errors);
     return errors;
   }
 };
-export const newEvent = (groupId, event) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}/events`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(event),
-  });
+export const createEvent = (groupId, event) => async (dispatch) => {
+  try {
+    const response = await csrfFetch(`/api/groups/${groupId}/events`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(event),
+    });
 
-  if (response.ok) {
     const newEvent = await response.json();
     dispatch(loadEvents([newEvent]));
-  } else {
-    const errors = await response.json();
+    return newEvent;
+  } catch (errors) {
     console.log(errors);
     return errors;
   }
 };
 export const newEventImage = (eventId, image) => async (/*dispatch*/) => {
-  const response = await csrfFetch(`/api/events/${eventId}/images`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(image),
-  });
+  try {
+    const response = await csrfFetch(`/api/events/${eventId}/images`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(image),
+    });
 
-  // if (response.ok) {
-  //   // const newImage = await response.json();
-  // } else {
-  if (!response.ok) {
-    const errors = await response.json();
+    return response.json();
+  } catch (errors) {
     console.log(errors);
     return errors;
   }

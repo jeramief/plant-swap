@@ -11,27 +11,27 @@ if (process.env.NODE_ENV === "production") {
 const groupImages = [
   {
     groupId: 1,
-    url: "image.url",
+    url: "https://unsplash.com/photos/kxqvE41_07k",
     preview: true,
   },
   {
     groupId: 1,
-    url: "image2.url",
+    url: "https://unsplash.com/photos/kxqvE41_07k",
     preview: false,
   },
   {
     groupId: 2,
-    url: "image url",
+    url: "https://unsplash.com/photos/kxqvE41_07k",
     preview: true,
   },
   {
     groupId: 3,
-    url: "image url",
+    url: "https://unsplash.com/photos/kxqvE41_07k",
     preview: true,
   },
   {
     groupId: 2,
-    url: "image url",
+    url: "https://unsplash.com/photos/kxqvE41_07k",
     preview: false,
   },
 ];

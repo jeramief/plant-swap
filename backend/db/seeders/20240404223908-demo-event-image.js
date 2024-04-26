@@ -11,27 +11,27 @@ if (process.env.NODE_ENV === "production") {
 const eventImages = [
   {
     eventId: 1,
-    url: "image.url",
+    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
     preview: true,
   },
   {
     eventId: 2,
-    url: "co-image.url",
+    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
     preview: true,
   },
   {
     eventId: 3,
-    url: "image url",
+    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
     preview: true,
   },
   {
     eventId: 4,
-    url: "image url",
+    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
     preview: true,
   },
   {
     eventId: 3,
-    url: "image url",
+    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
     preview: false,
   },
 ];

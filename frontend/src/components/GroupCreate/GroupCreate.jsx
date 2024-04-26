@@ -16,7 +16,7 @@ const GroupCreate = () => {
   const [type, setType] = useState("");
   const [isPrivate, setIsPrivate] = useState("");
   const [imageUrl, setImageUrl] = useState(
-    "https://picsum.photos/seed/picsum/200/300"
+    "https://unsplash.com/photos/green-leaf-plant-with-water-drops-kxqvE41_07k"
   );
   const [formErrors, setFormErrors] = useState([]);
   const [validations, setValidations] = useState({});
@@ -90,7 +90,7 @@ const GroupCreate = () => {
         errors.location = errors.location
           ? errors.location + " " + errors.state
           : errors.state;
-      console.log("Error saving group", errors);
+      console.log("Group creation failed", errors);
       setFormErrors(errors);
       return;
     }

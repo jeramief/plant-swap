@@ -28,6 +28,8 @@ const GroupDetails = () => {
   const url = GroupImages ? GroupImages[0]?.url : undefined;
   // console.log({ GroupImages, name, city, state, Organizer, about, Events });
 
+  console.log("group", group);
+
   let upcomingEvents, pastEvents, numEvents;
   if (Events) {
     upcomingEvents = Events.filter(
@@ -53,7 +55,9 @@ const GroupDetails = () => {
     <div className="group-details">
       <Breadcrumb to="/groups">Groups</Breadcrumb>
       <ShowImage url={url} type="hero" />
-
+      {/* 
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempora nihil laborum recusandae ex necessitatibus eum rerum quae consectetur molestias corporis fuga dolorum, laudantium porro repellat vero. Recusandae, provident? A numquam amet quas illo?
+ */}
       <div className="hero">
         <div className="hero-image">
           <img src="" alt="" />

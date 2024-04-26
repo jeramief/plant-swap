@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getEventById } from "../../store";
@@ -13,7 +13,7 @@ const EventDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { eventId } = useParams();
-  const event = useSelector((state) => state.eventsState[eventId]);
+  const event = useSelector((state) => state.eventsState)[eventId];
   const sessionUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
@@ -28,8 +28,8 @@ const EventDetails = () => {
     description,
     type,
     price,
-    startDate,
-    endDate,
+    // startDate,
+    // endDate,
     Group: group,
   } = event;
 
@@ -60,9 +60,6 @@ const EventDetails = () => {
             </div>
             <div className="event-info-card">
               <div className="time-details">
-                <div className="icon-wrapper">
-                  <i className="fa-2x fa-regular fa-clock" />
-                </div>
                 <div className="event-times">
                   <div className="event-time">
                     <h6>START</h6>
@@ -79,10 +76,6 @@ const EventDetails = () => {
                 </div>
               </div>
               <div className="cost-details">
-                <div className="icon-wrapper">
-                  <i className="fa-2x fa-solid fa-dollar-sign" />
-                </div>
-
                 <p>
                   {price !== undefined
                     ? Number(price) === 0
@@ -92,12 +85,9 @@ const EventDetails = () => {
                 </p>
               </div>
               <div className="async-details">
-                <div className="icon-wrapper">
-                  <i className="fa-2x fa-solid fa-map-pin" />
-                </div>
                 <p>{type === "In Person" ? "In Person" : "Online"}</p>
               </div>
-              {sessionUser && sessionUser.id === group.Organizer?.id && (
+              {sessionUser && sessionUser?.id === group?.organizerId && (
                 <div className="organizer-buttons">
                   <button onClick={() => alert("Feature coming soon...")}>
                     Update Event
@@ -105,7 +95,7 @@ const EventDetails = () => {
                   <OpenModalButton
                     buttonText="Delete Event"
                     modalComponent={
-                      <DeleteEventModal eventId={eventId} groupId={group.id} />
+                      <DeleteEventModal eventId={eventId} groupId={group?.id} />
                     }
                   />
                 </div>

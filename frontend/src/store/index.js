@@ -8,7 +8,13 @@ import {
   deleteGroup,
   newGroupImage,
 } from "./groupsReducer";
-import { getAllEvents, getEventById, deleteEvent } from "./eventsReducer";
+import {
+  getAllEvents,
+  getEventById,
+  createEvent,
+  newEventImage,
+  deleteEvent,
+} from "./eventsReducer";
 
 export default configureStore;
 export {
@@ -21,5 +27,7 @@ export {
   newGroupImage,
   getAllEvents,
   getEventById,
+  createEvent,
   deleteEvent,
+  newEventImage,
 };
