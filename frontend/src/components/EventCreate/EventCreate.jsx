@@ -14,12 +14,8 @@ function CreateEvent() {
   const [price, setPrice] = useState("");
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
-  const [url, setUrl] = useState(
-    "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0"
-  );
-  const [description, setDescription] = useState(
-    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus unde animi obcaecati itaque porro autem repellat debitis voluptas quas delectus. Alias exercitationem quam ratione dolorem laboriosam, libero molestias unde aspernatur?"
-  );
+  const [url, setUrl] = useState("");
+  const [description, setDescription] = useState("");
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 

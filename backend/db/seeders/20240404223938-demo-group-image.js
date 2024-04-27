@@ -11,28 +11,28 @@ if (process.env.NODE_ENV === "production") {
 const groupImages = [
   {
     groupId: 1,
-    url: "https://unsplash.com/photos/kxqvE41_07k",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
     preview: true,
   },
   {
     groupId: 1,
-    url: "https://unsplash.com/photos/kxqvE41_07k",
-    preview: false,
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
+    preview: true,
   },
   {
     groupId: 2,
-    url: "https://unsplash.com/photos/kxqvE41_07k",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
     preview: true,
   },
   {
     groupId: 3,
-    url: "https://unsplash.com/photos/kxqvE41_07k",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
     preview: true,
   },
   {
     groupId: 2,
-    url: "https://unsplash.com/photos/kxqvE41_07k",
-    preview: false,
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
+    preview: true,
   },
 ];
 

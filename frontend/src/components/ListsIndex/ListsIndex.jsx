@@ -38,6 +38,10 @@ const ListIndex = ({ type }) => {
         {groupsActive
           ? list?.map((group) => (
               <li key={group.id}>
+                <div
+                  className="breakline"
+                  style={{ border: "1px solid green" }}
+                ></div>
                 <GroupCard group={group} />
               </li>
             ))
@@ -46,10 +50,6 @@ const ListIndex = ({ type }) => {
                 <EventCard event={event} />
               </li>
             ))}
-        {/* {groups &&
-          groups.map((group) => (
-            // <li key={group.id}><Group groupData={group} /> </li>
-          ))} */}
       </ul>
     </section>
   );

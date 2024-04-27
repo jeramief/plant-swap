@@ -28,17 +28,21 @@ const GroupDetails = () => {
   const url = GroupImages ? GroupImages[0]?.url : undefined;
   // console.log({ GroupImages, name, city, state, Organizer, about, Events });
 
-  console.log("group", group);
-
   let upcomingEvents, pastEvents, numEvents;
   if (Events) {
     upcomingEvents = Events.filter(
-      (event) => new Date(event.startDate > new Date(Date.now()))
+      (event) => Date.parse(event.startDate) > Date.now()
     );
     pastEvents = Events.filter(
-      (event) => new Date(event.startDate) < new Date(Date.now())
+      (event) => Date.parse(event.startDate) < Date.now()
     );
     numEvents = `${Events.length} event${Events.length === 1 ? "" : "s"}`;
+    upcomingEvents.sort(
+      (a, b) => Date.parse(a.startDate) - Date.parse(b.startDate)
+    );
+    pastEvents.sort(
+      (a, b) => Date.parse(a.startDate) - Date.parse(b.startDate)
+    );
   }
 
   const joinGroup = () => {
@@ -50,6 +54,7 @@ const GroupDetails = () => {
   const updateGroup = () => {
     navigate(`/groups/${groupId}/edit`);
   };
+  // console.log({ upcomingEvents });
 
   return (
     <div className="group-details">
@@ -77,19 +82,32 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempor
           </div>
           {sessionUser && sessionUser.id === Organizer?.id ? (
             <div className="organizer-buttons">
-              <button className="create-event" onClick={createEvent}>
+              <button
+                className="create-event"
+                style={{ background: "grey" }}
+                onClick={createEvent}
+              >
                 Create Event
               </button>
-              <button className="update-group" onClick={updateGroup}>
+              <button
+                className="update-group"
+                style={{ background: "grey" }}
+                onClick={updateGroup}
+              >
                 Update
               </button>
               <OpenModalButton
-                buttonText="Delete Group"
+                backgroundColor="grey"
+                buttonText="Delete"
                 modalComponent={<DeleteGroupModal groupId={groupId} />}
               />
             </div>
           ) : sessionUser ? (
-            <button className="hero-button" onClick={joinGroup}>
+            <button
+              className="hero-button"
+              style={{ background: "red" }}
+              onClick={joinGroup}
+            >
               Join this group
             </button>
           ) : null}
@@ -103,7 +121,17 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempor
           </p>
           <h2>What we&apos;re about</h2>
           <p className="description">{about}</p>
-          {(!Events || !Events.length) && <h2>No Upcoming Events</h2>}
+          {Events && <h2>Events ({Events.length})</h2>}
+          {upcomingEvents &&
+            upcomingEvents.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          {pastEvents &&
+            pastEvents.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+
+          {/* {(!Events || !Events.length) && <h2>No Upcoming Events</h2>}
           {upcomingEvents && upcomingEvents.length > 0 && (
             <>
               <h2>Upcoming Events {upcomingEvents.length}</h2>
@@ -116,7 +144,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempor
             <>
               <h2>Past Events {pastEvents.length}</h2>
             </>
-          )}
+          )} */}
         </div>
       </div>
     </div>

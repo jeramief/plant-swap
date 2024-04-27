@@ -1,9 +1,9 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton-bonus";
 import "./Navigation.css";
 
-import logo from "../../../public/default.png";
+import logo from "../../images/vector/default-monochrome-black.svg";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
@@ -11,12 +11,20 @@ function Navigation({ isLoaded }) {
   return (
     <ul className="nav">
       <li>
-        <NavLink className="home-logo" to="/">
+        <Link className="home-logo" to="/">
           <img src={logo} style={{ width: 100 + "px" }} alt="" />
-        </NavLink>
+        </Link>
       </li>
       {isLoaded && (
         <li>
+          {sessionUser && (
+            <Link
+              to={"/groups/new"}
+              onClick={(e) => (!sessionUser ? e.preventDefault() : null)}
+            >
+              Start a new group
+            </Link>
+          )}
           <ProfileButton user={sessionUser} />
         </li>
       )}

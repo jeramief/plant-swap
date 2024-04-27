@@ -90,10 +90,10 @@ const EventDetails = () => {
               {sessionUser && sessionUser?.id === group?.organizerId && (
                 <div className="organizer-buttons">
                   <button onClick={() => alert("Feature coming soon...")}>
-                    Update Event
+                    Update
                   </button>
                   <OpenModalButton
-                    buttonText="Delete Event"
+                    buttonText="Delete"
                     modalComponent={
                       <DeleteEventModal eventId={eventId} groupId={group?.id} />
                     }

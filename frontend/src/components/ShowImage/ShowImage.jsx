@@ -8,20 +8,14 @@ const ShowImage = ({ url, type }) => {
     setShowImage(false);
   };
 
-  console.log(url);
-
   useEffect(() => {
     if (url) setShowImage(true);
-    console.log(url);
   }, [url]);
 
   return (
     <div className={`${type}-image${showImage ? " hide-overflow" : ""}`}>
       {showImage && showImage ? (
-        <img
-          onError={onError}
-          src={"https://picsum.photos/seed/picsum/200/300"}
-        />
+        <img onError={onError} src={url} style={{ width: "200px" }} />
       ) : (
         <div className="no-image">
           <h2>Image couldn&apos;t be loaded</h2>

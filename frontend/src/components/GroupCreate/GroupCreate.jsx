@@ -8,16 +8,12 @@ const GroupCreate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [location, setLocation] = useState("Indianapolis, IN");
+  const [location, setLocation] = useState("");
   const [name, setName] = useState("");
-  const [about, setAbout] = useState(
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatum ab provident doloremque quasi, fugiat incidunt saepe cupiditate, voluptas nesciunt perferendis reiciendis nulla sapiente adipisci dolorum unde expedita dolor debitis, in impedit omnis ipsa? Nihil accusantium error id consectetur, modi aliquid perferendis reiciendis unde asperiores quisquam rerum aperiam vero tempora, perspiciatis reprehenderit explicabo. Illo, itaque."
-  );
+  const [about, setAbout] = useState("");
   const [type, setType] = useState("");
   const [isPrivate, setIsPrivate] = useState("");
-  const [imageUrl, setImageUrl] = useState(
-    "https://unsplash.com/photos/green-leaf-plant-with-water-drops-kxqvE41_07k"
-  );
+  const [imageUrl, setImageUrl] = useState("");
   const [formErrors, setFormErrors] = useState([]);
   const [validations, setValidations] = useState({});
 
@@ -115,21 +111,21 @@ const GroupCreate = () => {
 
       <form onSubmit={onSubmit}>
         <div className="form-section">
-          <h3>START A NEW GROUP</h3>
-          <h2>
+          <h1>Sart a New Group</h1>
+          {/* <h2>
             We&apos;ll walk you through a few steps to build your local
             community
-          </h2>
+          </h2> */}
         </div>
         <div className="form-section">
           <h2>First, set your group&apos;s location</h2>
           <p>
             PlantSwap groups meet locally, in person and online. We&apos;ll
-            connect you with people in your area, and more can join you online.
+            connect you with people in your area.
           </p>
           <input
             type="text"
-            placeholder="City, State"
+            placeholder="City, STATE"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
@@ -155,7 +151,7 @@ const GroupCreate = () => {
           {validations.name && <p className="error">{validations.name}</p>}
         </div>
         <div className="form-section">
-          <h2>Now describe the purpose of your group.</h2>
+          <h2>Describe the purpose of your group.</h2>
           <p>
             People will see this when we promote your group, but you&apos;ll be
             able to add to it later, too.
@@ -166,7 +162,7 @@ const GroupCreate = () => {
             <li>What will you do at your events?</li>
           </ol>
           <textarea
-            placeholder="Please write at least 50 characters"
+            placeholder="Please write at least 30 characters"
             value={about}
             onChange={(e) => setAbout(e.target.value)}
           />

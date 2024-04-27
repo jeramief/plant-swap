@@ -11,28 +11,28 @@ if (process.env.NODE_ENV === "production") {
 const eventImages = [
   {
     eventId: 1,
-    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
     preview: true,
   },
   {
     eventId: 2,
-    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
     preview: true,
   },
   {
     eventId: 3,
-    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
     preview: true,
   },
   {
     eventId: 4,
-    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
     preview: true,
   },
   {
     eventId: 3,
-    url: "https://unsplash.com/photos/macro-photography-of-purple-petaled-flower-tVIqMgGlAG0",
-    preview: false,
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
+    preview: true,
   },
 ];
 
