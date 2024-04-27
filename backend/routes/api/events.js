@@ -54,6 +54,7 @@ router.get("/", validateQuery, async (req, res) => {
       {
         model: Group,
         attributes: ["id", "name", "city", "state"],
+        include: ["GroupImages"],
       },
       {
         model: Venue,
@@ -125,7 +126,8 @@ router.get("/:eventId", async (req, res, next) => {
     include: [
       {
         model: Group,
-        attributes: ["id", "name", "private", "city", "state", "organizerId"],
+        attributes: ["id", "name", "private", "city", "state"],
+        include: ["Organizer", "GroupImages"],
       },
       {
         model: Venue,

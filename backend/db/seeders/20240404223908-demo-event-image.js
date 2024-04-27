@@ -34,6 +34,11 @@ const eventImages = [
     url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
     preview: true,
   },
+  {
+    eventId: 5,
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
+    preview: true,
+  },
 ];
 
 /** @type {import('sequelize-cli').Migration} */

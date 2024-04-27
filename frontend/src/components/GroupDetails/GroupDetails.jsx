@@ -36,7 +36,7 @@ const GroupDetails = () => {
     pastEvents = Events.filter(
       (event) => Date.parse(event.startDate) < Date.now()
     );
-    numEvents = `${Events.length} event${Events.length === 1 ? "" : "s"}`;
+    // numEvents = `${Events.length} event${Events.length === 1 ? "" : "s"}`;
     upcomingEvents.sort(
       (a, b) => Date.parse(a.startDate) - Date.parse(b.startDate)
     );

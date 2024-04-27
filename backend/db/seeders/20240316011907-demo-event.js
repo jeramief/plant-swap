@@ -42,7 +42,7 @@ module.exports = {
           name: "Evening Tennis on the Water",
           type: "In Person",
           capacity: "10",
-          price: 10.5,
+          price: 0,
           description:
             "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
           startDate: "2021-11-19 20:00:00",

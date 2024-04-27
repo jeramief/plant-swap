@@ -9,7 +9,6 @@ const EventCard = ({ event }) => {
   const onClick = (eventId) => {
     navigate(`/events/${eventId}`);
   };
-  console.log({ event });
 
   const dateAndTime = new Date(event.startDate).toLocaleString().split(", ");
   const date = dateAndTime[0];
@@ -24,7 +23,11 @@ const EventCard = ({ event }) => {
     .join("")} ${dateAndTime[1].split(" ").slice(1).join("")}`;
 
   return (
-    <div className="event-card" onClick={() => onClick(event.id)}>
+    <div
+      className="event-card"
+      style={{ cursor: "pointer" }}
+      onClick={() => onClick(event.id)}
+    >
       <div className="event-card-main">
         <ShowImage url={event.previewImage} />
         <div className="event-content">

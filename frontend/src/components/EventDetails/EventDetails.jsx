@@ -24,14 +24,19 @@ const EventDetails = () => {
 
   const {
     name,
-    EventImages: images,
+    EventImages,
     description,
     type,
     price,
     // startDate,
     // endDate,
-    Group: group,
+    Group,
   } = event;
+  const previewImage = EventImages?.length ? EventImages[0].url : null;
+  const groupPreviewImage = Group?.GroupImages?.find(
+    (group) => group.preview === true
+  ).url;
+  console.log({ groupPreviewImage, previewImage });
 
   return (
     <div className="event-show">
@@ -39,27 +44,30 @@ const EventDetails = () => {
         <Breadcrumb to="/events">Events</Breadcrumb>
         <h1>{name}</h1>
         <h3>
-          Hosted by {group?.Organizer?.firstName} {group?.Organizer?.lastName}
+          Hosted by {Group?.Organizer?.firstName} {Group?.Organizer?.lastName}
         </h3>
       </div>
       <div className="event-details-wrapper">
         <div className="event-details">
-          <ShowImage url={images?.[0]?.url} type="hero" />
+          {previewImage && <ShowImage url={previewImage} type="hero" />}
           <div className="details-cards">
             <div
-              className="group-info-card"
-              onClick={() => navigate(`/groups/${group.id}`)}
+              className="Group-info-card"
+              onClick={() => navigate(`/groups/${Group.id}`)}
             >
-              <ShowImage url={group?.GroupImages?.[0].url} type="icon" />
+              <ShowImage url={groupPreviewImage} type="icon" />
               <div className="top-info">
-                <h5>{group?.name}</h5>
+                <h5>{Group?.name}</h5>
                 <p className="details">
-                  {group?.private ? "Private" : "Public"}
+                  {Group?.private ? "Private" : "Public"}
                 </p>
               </div>
             </div>
             <div className="event-info-card">
               <div className="time-details">
+                <div className="icon-wrapper">
+                  <i className="fa-2x fa-regular fa-clock" />
+                </div>
                 <div className="event-times">
                   <div className="event-time">
                     <h6>START</h6>
@@ -87,15 +95,19 @@ const EventDetails = () => {
               <div className="async-details">
                 <p>{type === "In Person" ? "In Person" : "Online"}</p>
               </div>
-              {sessionUser && sessionUser?.id === group?.organizerId && (
+              {sessionUser && sessionUser?.id === Group?.Organizer?.id && (
                 <div className="organizer-buttons">
-                  <button onClick={() => alert("Feature coming soon...")}>
+                  <button
+                    style={{ background: "grey" }}
+                    onClick={() => alert("Feature coming soon...")}
+                  >
                     Update
                   </button>
                   <OpenModalButton
                     buttonText="Delete"
+                    backgroundColor={"grey"}
                     modalComponent={
-                      <DeleteEventModal eventId={eventId} groupId={group?.id} />
+                      <DeleteEventModal eventId={eventId} groupId={Group?.id} />
                     }
                   />
                 </div>

@@ -34,6 +34,11 @@ const groupImages = [
     url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
     preview: true,
   },
+  {
+    groupId: 4,
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
+    preview: true,
+  },
 ];
 
 /** @type {import('sequelize-cli').Migration} */

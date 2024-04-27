@@ -17,7 +17,7 @@ const removeEvent = (eventId) => ({
 });
 
 export const getAllEvents = () => async (dispatch) => {
-  const response = await csrfFetch("/api/events");
+  const response = await csrfFetch(`/api/events?size=20`);
 
   if (response.ok) {
     const { Events: events } = await response.json();

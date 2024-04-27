@@ -81,14 +81,12 @@ function CreateEvent() {
     const event = {
       name,
       type,
-      private: isPrivate,
       price,
       startDate: start,
       endDate: end,
-      url,
       description,
       capacity: 10,
-      venueId: 2,
+      venueId: 1,
     };
 
     const image = {

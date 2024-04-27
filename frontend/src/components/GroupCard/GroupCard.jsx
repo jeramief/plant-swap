@@ -3,6 +3,7 @@ import "./GroupCard.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllGroupEvents } from "../../store";
+import ShowImage from "../ShowImage";
 // import ShowImage from "../ShowImage";
 
 const GroupCard = ({ group }) => {
@@ -26,7 +27,7 @@ const GroupCard = ({ group }) => {
       style={{ cursor: "pointer" }}
       onClick={() => onClick(group.id)}
     >
-      {/* <ShowImage url={group.previewImage} type="cart" /> */}
+      <ShowImage url={group.previewImage} type="cart" />
 
       <div className="content">
         <h3>{group.name}</h3>

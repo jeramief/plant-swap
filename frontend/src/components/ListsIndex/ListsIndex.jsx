@@ -18,7 +18,23 @@ const ListIndex = ({ type }) => {
     groupsActive ? state.groupsState : state.eventsState
   );
   const list = Object.values(activeState);
-  // console.log(list);
+  let upcomingEvents, pastEvents, eventList;
+  if (!groupsActive) {
+    console.log({ list });
+    upcomingEvents = list?.filter(
+      (event) => Date.parse(event.startDate) > Date.now()
+    );
+    pastEvents = list?.filter(
+      (event) => Date.parse(event.startDate) < Date.now()
+    );
+    upcomingEvents.sort(
+      (a, b) => Date.parse(a.startDate) - Date.parse(b.startDate)
+    );
+    pastEvents.sort(
+      (a, b) => Date.parse(a.startDate) - Date.parse(b.startDate)
+    );
+    eventList = [...upcomingEvents, ...pastEvents];
+  }
 
   useEffect(() => {
     const getList = () => (groupsActive ? getAllGroups() : getAllEvents());
@@ -45,8 +61,12 @@ const ListIndex = ({ type }) => {
                 <GroupCard group={group} />
               </li>
             ))
-          : list?.map((event) => (
+          : eventList?.map((event) => (
               <li key={event.id}>
+                <div
+                  className="breakline"
+                  style={{ border: "1px solid green" }}
+                ></div>
                 <EventCard event={event} />
               </li>
             ))}

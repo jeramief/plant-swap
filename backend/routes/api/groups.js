@@ -297,6 +297,7 @@ router.get("/:groupId/events", async (req, res, next) => {
       previewImage: event.previewImage,
       Group: event.Group,
       Venue: event.Venue,
+      description: event.description,
     };
 
     eventsArr.push(payload);
