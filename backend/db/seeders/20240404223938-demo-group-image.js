@@ -11,27 +11,27 @@ if (process.env.NODE_ENV === "production") {
 const groupImages = [
   {
     groupId: 1,
-    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1714234817/41IkfFhdJTL_hcg9og.jpg",
     preview: true,
   },
   {
     groupId: 1,
-    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
     preview: true,
   },
   {
     groupId: 2,
-    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1714234864/Attenborough-pitcher-plant-Philippines-native_ulvesn.jpg",
     preview: true,
   },
   {
     groupId: 3,
-    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1714234790/5dd8732676db83be528e64137f9076c8_ucbfps.jpg",
     preview: true,
   },
   {
     groupId: 2,
-    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1677039833/tfzkbkqxctw8mslnchye.png",
+    url: "https://res.cloudinary.com/dammgkvnx/image/upload/v1685558128/misrjddjks1li6attzzi.jpg",
     preview: true,
   },
   {

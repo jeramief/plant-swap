@@ -16,6 +16,7 @@ const GroupCreate = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [formErrors, setFormErrors] = useState([]);
   const [validations, setValidations] = useState({});
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const errorsArray = [];
@@ -57,6 +58,7 @@ const GroupCreate = () => {
 
   async function onSubmit(e) {
     e.preventDefault();
+    setSubmitted(true);
 
     if (formErrors.length) return;
 
@@ -118,7 +120,7 @@ const GroupCreate = () => {
           </h2> */}
         </div>
         <div className="form-section">
-          <h2>First, set your group&apos;s location</h2>
+          <h2>Set your group&apos;s location</h2>
           <p>
             PlantSwap groups meet locally, in person and online. We&apos;ll
             connect you with people in your area.
@@ -129,7 +131,7 @@ const GroupCreate = () => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
-          {validations.location && (
+          {submitted && validations.location && (
             <p className="error">{validations.location}</p>
           )}
         </div>
@@ -148,7 +150,9 @@ const GroupCreate = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {validations.name && <p className="error">{validations.name}</p>}
+          {submitted && validations.name && (
+            <p className="error">{validations.name}</p>
+          )}
         </div>
         <div className="form-section">
           <h2>Describe the purpose of your group.</h2>
@@ -166,7 +170,9 @@ const GroupCreate = () => {
             value={about}
             onChange={(e) => setAbout(e.target.value)}
           />
-          {validations.about && <p className="error">{validations.about}</p>}
+          {submitted && validations.about && (
+            <p className="error">{validations.about}</p>
+          )}
         </div>
         <div className="form-section final-steps">
           <h2>Final steps...</h2>
@@ -180,7 +186,9 @@ const GroupCreate = () => {
               <option value="In person">In person</option>
               <option value="Online">Online</option>
             </select>
-            {validations.type && <p className="error">{validations.type}</p>}
+            {submitted && validations.type && (
+              <p className="error">{validations.type}</p>
+            )}
           </div>
 
           <div className="select-group">
@@ -195,7 +203,7 @@ const GroupCreate = () => {
               <option value="true">Private</option>
               <option value="false">Public</option>
             </select>
-            {validations.private && (
+            {submitted && validations.private && (
               <p className="error">{validations.private}</p>
             )}
           </div>
@@ -207,11 +215,11 @@ const GroupCreate = () => {
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
-          {validations.imageUrl && (
+          {submitted && validations.imageUrl && (
             <p className="error">{validations.imageUrl}</p>
           )}
         </div>
-        <button disabled={formErrors.length}>Create Group</button>
+        <button>Create Group</button>
       </form>
     </div>
   );

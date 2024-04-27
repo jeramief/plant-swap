@@ -111,7 +111,7 @@ const GroupUpdate = () => {
     <div className="create-group-page">
       <form onSubmit={onSubmit}>
         <div className="form-section">
-          <h3>UPDATE YOUR GROUP</h3>
+          <h3>Update Your Group</h3>
           <h2>We&apos;ll walk you through a few steps to update your group</h2>
         </div>
         <div className="form-section">

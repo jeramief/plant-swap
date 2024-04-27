@@ -11,8 +11,8 @@ const DeleteGroupModal = ({ groupId }) => {
 
   const submitDelete = async () => {
     await dispatch(deleteGroup(groupId))
-      .then(() => navigate(`/groups/${groupId}`))
       .then(() => closeModal())
+      .then(() => navigate(`/groups`))
       .catch((errors) => {
         console.log("Delete event errors: ", errors);
       });
@@ -32,8 +32,12 @@ const DeleteGroupModal = ({ groupId }) => {
     <div style={{ background: "gray" }}>
       <h2>Confirm Delete</h2>
       <p>Are you sure you want to remove this group?</p>
-      <button onClick={submitDelete}>Yes (Delete group)</button>
-      <button onClick={closeModal}>No (Keep group)</button>
+      <button style={{ background: "red" }} onClick={submitDelete}>
+        Yes (Delete group)
+      </button>
+      <button style={{ background: "grey" }} onClick={closeModal}>
+        No (Keep group)
+      </button>
     </div>
   );
 };

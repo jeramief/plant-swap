@@ -10,7 +10,7 @@ function CreateEvent() {
 
   const [name, setName] = useState("");
   const [type, setType] = useState("");
-  const [isPrivate, setIsPrivate] = useState("");
+  // const [isPrivate, setIsPrivate] = useState("");
   const [price, setPrice] = useState("");
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
@@ -31,7 +31,7 @@ function CreateEvent() {
 
     if (!name) validationErrors.name = "Name is required";
     if (!type) validationErrors.type = "Event type is required";
-    if (!isPrivate) validationErrors.private = "Visibility is required";
+    // if (!isPrivate) validationErrors.private = "Visibility is required";
     if (!price.toString()) validationErrors.price = "Price is required";
     if (!start) validationErrors.startDate = "Event start is required";
     if (!end) validationErrors.endDate = "Event end is required";
@@ -58,7 +58,7 @@ function CreateEvent() {
 
     if (!name) validationErrors.name = "Name is required";
     if (!type) validationErrors.type = "Event type is required";
-    if (!isPrivate) validationErrors.private = "Visibility is required";
+    // if (!isPrivate) validationErrors.private = "Visibility is required";
     if (!price.toString()) validationErrors.price = "Price is required";
     if (!start) validationErrors.startDate = "Event start is required";
     if (!end) validationErrors.endDate = "Event end is required";
@@ -67,7 +67,7 @@ function CreateEvent() {
       validationErrors.description = "Description needs 30 or more characters";
 
     setErrors(validationErrors);
-  }, [name, type, isPrivate, price, start, end, url, description, submitted]);
+  }, [name, type, price, start, end, url, description, submitted]);
 
   if (!group) return null;
 
@@ -138,7 +138,7 @@ function CreateEvent() {
 
         <div className="form-section">
           <label>
-            Is this an in person or online event?
+            Is this an in-person or online event?
             <select
               name="type"
               value={type}
@@ -153,7 +153,7 @@ function CreateEvent() {
           </label>
           {errors.type && <p className="error">{errors.type}</p>}
 
-          <label>
+          {/* <label>
             Is this event private or public?
             <select
               name="isPrivate"
@@ -167,7 +167,7 @@ function CreateEvent() {
               <option value="true">Private</option>
             </select>
           </label>
-          {errors.private && <p className="error">{errors.private}</p>}
+          {errors.private && <p className="error">{errors.private}</p>} */}
 
           <label>
             What is the price for your event?
