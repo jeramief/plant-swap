@@ -90,5 +90,7 @@
 /* --------------------JOIN BUTTON-------------- */
 .landing-page-join-button-container > button {
   background: grey;
+  padding: 10px;
+  border-radius: 50%;
 }
 /* --------------------JOIN BUTTON-------------- */

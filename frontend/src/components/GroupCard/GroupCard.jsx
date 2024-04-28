@@ -1,15 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import "./GroupCard.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getAllGroupEvents } from "../../store";
 import ShowImage from "../ShowImage";
-// import ShowImage from "../ShowImage";
 
 const GroupCard = ({ group }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const groupEvents = useSelector((state) => state.eventsState);
 
   useEffect(() => {
     dispatch(getAllGroupEvents(group.id));
