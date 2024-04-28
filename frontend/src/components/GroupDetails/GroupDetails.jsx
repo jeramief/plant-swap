@@ -28,7 +28,7 @@ const GroupDetails = () => {
   const url = GroupImages ? GroupImages[0]?.url : undefined;
   // console.log({ GroupImages, name, city, state, Organizer, about, Events });
 
-  let upcomingEvents, pastEvents, numEvents;
+  let upcomingEvents, pastEvents;
   if (Events) {
     upcomingEvents = Events.filter(
       (event) => Date.parse(event.startDate) > Date.now()
@@ -74,7 +74,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempor
               {city}, {state}
             </p>
             <p className="details">
-              {numEvents} &middot; {group.private ? "Private" : "Public"}
+              {Events.length} &middot; {group.private ? "Private" : "Public"}
             </p>
             <p className="details">
               Organized by {Organizer?.firstName} {Organizer?.lastName}

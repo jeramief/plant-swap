@@ -15,7 +15,7 @@ const ShowImage = ({ url, type }) => {
   return (
     <div className={`${type}-image${showImage ? " hide-overflow" : ""}`}>
       {showImage && showImage ? (
-        <img onError={onError} src={url} style={{ width: "200px" }} />
+        <img onError={onError} src={url} />
       ) : (
         <div className="no-image">
           <h2>Image couldn&apos;t be loaded</h2>
