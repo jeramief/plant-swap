@@ -1,12 +1,7 @@
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import { getAllGroups } from "../../store/groupsReducer";
-// import { getAllEvents } from "../../store/eventsReducer";
 import { getAllGroups, getAllEvents } from "../../store";
-// import Group from "./Group";
-// import GroupItem from '../GroupItem';
-// import EventItem from '../EventItem';
 import "./ListsIndex.css";
 import GroupCard from "../GroupCard";
 import EventCard from "../EventCard";
@@ -44,8 +39,18 @@ const ListIndex = ({ type }) => {
   return (
     <section className="list-container">
       <div className="events-and-groups-headings-container">
-        <NavLink to="/events">Events</NavLink>
-        <NavLink to="/groups">Groups</NavLink>
+        <NavLink
+          className={groupsActive ? "notActive" : "isActive"}
+          to="/events"
+        >
+          Events
+        </NavLink>
+        <NavLink
+          className={groupsActive ? "isActive" : "notActive"}
+          to="/groups"
+        >
+          Groups
+        </NavLink>
       </div>
       <div>
         <p>{groupsActive ? "Groups" : "Events"} in Meetup</p>
@@ -54,19 +59,13 @@ const ListIndex = ({ type }) => {
         {groupsActive
           ? list?.map((group) => (
               <li key={group.id}>
-                <div
-                  className="breakline"
-                  style={{ border: "1px solid green" }}
-                ></div>
+                <div className="breakline"></div>
                 <GroupCard group={group} />
               </li>
             ))
           : eventList?.map((event) => (
               <li key={event.id}>
-                <div
-                  className="breakline"
-                  style={{ border: "1px solid green" }}
-                ></div>
+                <div className="breakline"></div>
                 <EventCard event={event} />
               </li>
             ))}

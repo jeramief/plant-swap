@@ -49,7 +49,7 @@ function Landing() {
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </Link>
         <Link
-          className="start-group-container"
+          className={`start-group-container${sessionUser ? "" : "-grey"}`}
           to={"/groups/new"}
           onClick={(e) => (!sessionUser ? e.preventDefault() : null)}
         >
@@ -61,11 +61,11 @@ function Landing() {
       {/* --------------------GROUPS AND EVENTS-------- */}
 
       {/* --------------------JOIN BUTTON-------------- */}
-      {!sessionUser && (
-        <div className="landing-page-join-button-container">
-          <button>Join PlantSwap</button>
-        </div>
-      )}
+      {/* {!sessionUser && ( */}
+      <div className="landing-page-join-button-container">
+        <button>Join PlantSwap</button>
+      </div>
+      {/* )} */}
       {/* --------------------JOIN BUTTON-------------- */}
     </section>
   );

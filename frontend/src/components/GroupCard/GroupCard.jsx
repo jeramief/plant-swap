@@ -19,8 +19,6 @@ const GroupCard = ({ group }) => {
     navigate(`/groups/${groupId}`);
   };
 
-  console.log({ group, groupEvents });
-
   return (
     <div
       className="group-card"

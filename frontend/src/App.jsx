@@ -6,6 +6,7 @@ import { Outlet, createBrowserRouter, RouterProvider } from "react-router-dom";
 import Navigation from "./components/Navigation/Navigation-bonus";
 import * as sessionActions from "./store/session";
 import { Modal } from "./context/Modal";
+
 import Landing from "./components/Landing";
 import ListsIndex from "./components/ListsIndex";
 import GroupDetails from "./components/GroupDetails/GroupDetails";

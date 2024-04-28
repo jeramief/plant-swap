@@ -10,6 +10,8 @@ const EventCard = ({ event }) => {
     navigate(`/events/${eventId}`);
   };
 
+  console.log({ event });
+
   const dateAndTime = new Date(event.startDate).toLocaleString().split(", ");
   const date = dateAndTime[0];
   const time = `${dateAndTime[1]
@@ -28,18 +30,19 @@ const EventCard = ({ event }) => {
       style={{ cursor: "pointer" }}
       onClick={() => onClick(event.id)}
     >
-      <div className="event-card-main">
-        <ShowImage url={event.previewImage} />
-        <div className="event-content">
-          <p className="date-time">{date}</p>
-          <p>&middot;</p>
-          <p className="date-time">{time}</p>
-          <h3>{event.name}</h3>
-          <p className="location">
-            {event.type.toLowerCase() === "online"
-              ? "Online"
-              : `${event.Group?.city}, ${event.Group?.state}`}
-          </p>
+      <div className="event-card-main-details">
+        <ShowImage url={event.previewImage} type={"cart"} />
+        <div className="event-card-main">
+          <div className="event-content">
+            <span className="date-time">{date}</span> <span>&middot;</span>{" "}
+            <span className="date-time">{time}</span>
+            <h3>{event.name}</h3>
+            <p className="location">
+              {event.type.toLowerCase() === "online"
+                ? "Online"
+                : `${event.Group?.city}, ${event.Group?.state}`}
+            </p>
+          </div>
         </div>
       </div>
       <p className="description">{event.description}</p>

@@ -12,13 +12,14 @@ function Navigation({ isLoaded }) {
     <ul className="nav">
       <li>
         <Link className="home-logo" to="/">
-          <img src={logo} style={{ width: 100 + "px" }} alt="" />
+          {logo && <img src={logo} alt="" />}
         </Link>
       </li>
       {isLoaded && (
-        <li>
+        <li className="start-group-and-user-modal">
           {sessionUser && (
             <Link
+              className="nav-start-group"
               to={"/groups/new"}
               onClick={(e) => (!sessionUser ? e.preventDefault() : null)}
             >

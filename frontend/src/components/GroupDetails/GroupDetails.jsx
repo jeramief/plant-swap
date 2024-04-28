@@ -74,7 +74,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempor
               {city}, {state}
             </p>
             <p className="details">
-              {Events.length} &middot; {group.private ? "Private" : "Public"}
+              {Events?.length} &middot; {group.private ? "Private" : "Public"}
             </p>
             <p className="details">
               Organized by {Organizer?.firstName} {Organizer?.lastName}
@@ -121,7 +121,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempor
           </p>
           <h2>What we&apos;re about</h2>
           <p className="description">{about}</p>
-          {Events && <h2>Events ({Events.length})</h2>}
+          {Events && <h2>Events ({Events?.length})</h2>}
           {upcomingEvents &&
             upcomingEvents.map((event) => (
               <EventCard key={event.id} event={event} />

@@ -57,7 +57,8 @@
 }
 .go-to-groups-container,
 .go-to-events-container,
-.start-group-container {
+.start-group-container,
+.start-group-container-grey {
   width: 30%;
   display: flex;
   flex-direction: column;
@@ -78,6 +79,11 @@
 .go-to-events-container span,
 .start-group-container span {
   text-decoration: underline;
+}
+.start-group-container-grey {
+  cursor: default;
+  color: grey;
+  text-decoration: none;
 }
 /* --------------------GROUPS AND EVENTS-------- */
 

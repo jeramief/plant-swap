@@ -1,13 +1,41 @@
+/* --------------------WAS HERE BEFORE-------- */
 .profile-dropdown {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
 }
-
 .hidden {
   display: none;
 }
+/* --------------------WAS HERE BEFORE-------- */
 
+/* --------------------ALL-------------------- */
 .nav {
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 0 30px;
+  padding: 0 5%;
 }
+/* --------------------ALL-------------------- */
+
+/* --------------------LOGO------------------- */
+.home-logo img {
+  width: 100px;
+  padding: 5px;
+  border: 3px solid rgb(165, 85, 35);
+  border-radius: 50%;
+}
+/* --------------------LOGO------------------- */
+
+/* --------------------START GROUP AND MODAL-- */
+.start-group-and-user-modal {
+  width: 20%;
+  display: flex;
+  justify-content: end;
+  gap: 10%;
+}
+.nav-start-group {
+  color: rgb(165, 85, 35);
+}
+/* --------------------START GROUP AND MODAL-- */
