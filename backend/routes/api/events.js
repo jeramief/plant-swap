@@ -49,6 +49,7 @@ router.get("/", validateQuery, async (req, res) => {
       "type",
       "startDate",
       "endDate",
+      "description",
     ],
     include: [
       {
@@ -96,6 +97,7 @@ router.get("/", validateQuery, async (req, res) => {
       endDate: event.endDate.toString(),
       numAttending,
       previewImage: event.previewImage,
+      description: event.description,
       Group: event.Group,
       Venue: event.Venue,
     };
