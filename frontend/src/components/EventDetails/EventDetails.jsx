@@ -64,22 +64,24 @@ const EventDetails = () => {
 
   return (
     <div className="event-details">
-      <div className="event-header">
+      <div className="event-details-main">
         <Breadcrumb to="/events">Events</Breadcrumb>
-        <h1>{name}</h1>
-        <h3>
-          Hosted by {Group?.Organizer?.firstName} {Group?.Organizer?.lastName}
-        </h3>
+        <div className="event-header">
+          <h1>{name}</h1>
+          <h3>
+            Hosted by {Group?.Organizer?.firstName} {Group?.Organizer?.lastName}
+          </h3>
+        </div>
+        {previewImage && (
+          <ShowImage
+            style={{ width: "25%" }}
+            url={previewImage}
+            type="event-details-preview"
+          />
+        )}
       </div>
       <div className="event-details-wrapper">
         <div className="event-details">
-          {previewImage && (
-            <ShowImage
-              style={{ width: "25%" }}
-              url={previewImage}
-              type="event-details-preview"
-            />
-          )}
           <div className="details-cards">
             <div
               className="Group-info-card"

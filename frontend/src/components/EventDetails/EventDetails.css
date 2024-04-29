@@ -43,7 +43,7 @@
 }
 
 .group-info-card {
-  /* display: flex; */
+  display: flex;
   align-items: center;
   padding-left: 30px;
   padding-top: 30px;

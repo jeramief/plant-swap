@@ -64,7 +64,7 @@ const validateGroup = [
   check("name").trim().notEmpty().withMessage("Group name cannot be empty"),
   check("about")
     .exists({ checkFalsy: true })
-    .isLength({ min: 50 })
+    .isLength({ min: 30 })
     .withMessage("About must be 50 characters or more"),
   check("type")
     .exists({ checkFalsy: true })
