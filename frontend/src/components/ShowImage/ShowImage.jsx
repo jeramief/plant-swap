@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./ShowImage.css";
 
-const ShowImage = ({ url, type }) => {
+const ShowImage = ({ url, type, style }) => {
   const [showImage, setShowImage] = useState(false);
 
   const onError = () => {
@@ -15,7 +15,7 @@ const ShowImage = ({ url, type }) => {
   return (
     <div className={`${type}-image${showImage ? " hide-overflow" : ""}`}>
       {showImage && showImage ? (
-        <img onError={onError} src={url} />
+        <img style={style} onError={onError} src={url} />
       ) : (
         <div className="no-image">
           <h2>Image couldn&apos;t be loaded</h2>

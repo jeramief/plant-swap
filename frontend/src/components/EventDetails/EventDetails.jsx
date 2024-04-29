@@ -37,33 +37,33 @@ const EventDetails = () => {
     (group) => group.preview === true
   ).url;
 
-  // const startDateAndTime = new Date(event.startDate)
-  //   .toLocaleString()
-  //   .split(", ");
-  // const startDateConvert = startDateAndTime[0];
-  // const startTimeConvert = `${startDateAndTime[1]
-  //   .split(" ")
-  //   .slice(0, 1)
-  //   .join("")
-  //   .split("")
-  //   .reverse()
-  //   .slice(3)
-  //   .reverse()
-  //   .join("")} ${startDateAndTime[1].split(" ").slice(1).join("")}`;
-  // const endDateAndTime = new Date(event.startDate).toLocaleString().split(", ");
-  // const endDateConvert = endDateAndTime[0];
-  // const endTimeConvert = `${endDateAndTime[1]
-  //   .split(" ")
-  //   .slice(0, 1)
-  //   .join("")
-  //   .split("")
-  //   .reverse()
-  //   .slice(3)
-  //   .reverse()
-  //   .join("")} ${endDateAndTime[1].split(" ").slice(1).join("")}`;
+  const startDateAndTime = new Date(event.startDate)
+    .toLocaleString()
+    .split(", ");
+  const startDateConvert = startDateAndTime[0];
+  const startTimeConvert = `${startDateAndTime[1]
+    .split(" ")
+    .slice(0, 1)
+    .join("")
+    .split("")
+    .reverse()
+    .slice(3)
+    .reverse()
+    .join("")} ${startDateAndTime[1].split(" ").slice(1).join("")}`;
+  const endDateAndTime = new Date(event.startDate).toLocaleString().split(", ");
+  const endDateConvert = endDateAndTime[0];
+  const endTimeConvert = `${endDateAndTime[1]
+    .split(" ")
+    .slice(0, 1)
+    .join("")
+    .split("")
+    .reverse()
+    .slice(3)
+    .reverse()
+    .join("")} ${endDateAndTime[1].split(" ").slice(1).join("")}`;
 
   return (
-    <div className="event-show">
+    <div className="event-details">
       <div className="event-header">
         <Breadcrumb to="/events">Events</Breadcrumb>
         <h1>{name}</h1>
@@ -73,13 +73,23 @@ const EventDetails = () => {
       </div>
       <div className="event-details-wrapper">
         <div className="event-details">
-          {previewImage && <ShowImage url={previewImage} type="hero" />}
+          {previewImage && (
+            <ShowImage
+              style={{ width: "25%" }}
+              url={previewImage}
+              type="event-details-preview"
+            />
+          )}
           <div className="details-cards">
             <div
               className="Group-info-card"
               onClick={() => navigate(`/groups/${Group.id}`)}
             >
-              <ShowImage url={groupPreviewImage} type="icon" />
+              <ShowImage
+                style={{ width: "50%" }}
+                url={groupPreviewImage}
+                type="icon"
+              />
               <div className="top-info">
                 <h5>{Group?.name}</h5>
                 <p className="details">
@@ -95,19 +105,22 @@ const EventDetails = () => {
                 <div className="event-times">
                   <div className="event-time">
                     <h6>START</h6>
-                    {/* <p>{startDay}</p> */}
+                    <p>{startDateConvert}</p>
                     <p>&middot;</p>
-                    {/* <p>{startTime}</p> */}
+                    <p>{startTimeConvert}</p>
                   </div>
                   <div className="event-time">
                     <h6>END</h6>
-                    {/* <p>{endDay}</p> */}
+                    <p>{endDateConvert}</p>
                     <p>&middot;</p>
-                    {/* <p>{endTime}</p> */}
+                    <p>{endTimeConvert}</p>
                   </div>
                 </div>
               </div>
               <div className="cost-details">
+                <div className="icon-wrapper">
+                  <i className="fa-2x fa-solid fa-dollar-sign" />
+                </div>
                 <p>
                   {price !== undefined
                     ? Number(price) === 0
@@ -117,6 +130,9 @@ const EventDetails = () => {
                 </p>
               </div>
               <div className="async-details">
+                <div className="icon-wrapper">
+                  <i className="fa-2x fa-solid fa-map-pin" />
+                </div>
                 <p>{type === "In Person" ? "In Person" : "Online"}</p>
               </div>
               {sessionUser && sessionUser?.id === Group?.Organizer?.id && (
@@ -140,7 +156,7 @@ const EventDetails = () => {
           </div>
         </div>
         <div className="event-description">
-          <h2>Details</h2>
+          <h2>Description</h2>
           <p>{description}</p>
         </div>
       </div>
