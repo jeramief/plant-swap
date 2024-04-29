@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupById, getAllGroupEvents } from "../../store";
-import "./GroupDetails";
+import "./GroupDetails.css";
 
 import OpenModalButton from "../OpenModalButton";
 import DeleteGroupModal from "../DeleteGroupModal";
@@ -59,38 +59,33 @@ const GroupDetails = () => {
   return (
     <div className="group-details">
       <Breadcrumb to="/groups">Groups</Breadcrumb>
-      <ShowImage url={url} type="hero" />
-      {/* 
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempora nihil laborum recusandae ex necessitatibus eum rerum quae consectetur molestias corporis fuga dolorum, laudantium porro repellat vero. Recusandae, provident? A numquam amet quas illo?
- */}
-      <div className="hero">
-        <div className="hero-image">
-          <img src="" alt="" />
-        </div>
-        <div className="hero-details">
+      <div className="group-details-hero">
+        <ShowImage url={url} type="group-details-hero" />
+        <div className="group-details-hero-details">
           <div>
             <h2>{name}</h2>
-            <p className="location">
+            <p className="group-details-location">
               {city}, {state}
             </p>
-            <p className="details">
-              {Events?.length} &middot; {group.private ? "Private" : "Public"}
+            <p className="group-details-details">
+              {Events?.length} events &middot;{" "}
+              {group.private ? "Private" : "Public"}
             </p>
-            <p className="details">
+            <p className="group-details-details">
               Organized by {Organizer?.firstName} {Organizer?.lastName}
             </p>
           </div>
           {sessionUser && sessionUser.id === Organizer?.id ? (
-            <div className="organizer-buttons">
+            <div className="group-details-organizer-buttons">
               <button
-                className="create-event"
+                className="group-details-create-event"
                 style={{ background: "grey" }}
                 onClick={createEvent}
               >
-                Create Event
+                Create event
               </button>
               <button
-                className="update-group"
+                className="group-details-update-group"
                 style={{ background: "grey" }}
                 onClick={updateGroup}
               >
@@ -104,7 +99,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempor
             </div>
           ) : sessionUser ? (
             <button
-              className="hero-button"
+              className="group-details-hero-button"
               style={{ background: "red" }}
               onClick={joinGroup}
             >
@@ -114,37 +109,24 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem assumenda, tempor
         </div>
       </div>
       <div className="group-details-wrapper">
-        <div className="group-details">
+        <div className="group-details-group-details">
           <h2>Organizer</h2>
-          <p className="organizer">
+          <p className="group-details-organizer">
             {Organizer?.firstName} {Organizer?.lastName}
           </p>
           <h2>What we&apos;re about</h2>
-          <p className="description">{about}</p>
-          {Events && <h2>Events ({Events?.length})</h2>}
-          {upcomingEvents &&
-            upcomingEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          {pastEvents &&
-            pastEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-
-          {/* {(!Events || !Events.length) && <h2>No Upcoming Events</h2>}
-          {upcomingEvents && upcomingEvents.length > 0 && (
-            <>
-              <h2>Upcoming Events {upcomingEvents.length}</h2>
-              {upcomingEvents.map((event) => (
+          <p className="group-details-description">{about}</p>
+          <div className="events-list">
+            {Events && <h2>Events ({Events?.length})</h2>}
+            {upcomingEvents &&
+              upcomingEvents.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
-            </>
-          )}
-          {pastEvents && pastEvents.length > 0 && (
-            <>
-              <h2>Past Events {pastEvents.length}</h2>
-            </>
-          )} */}
+            {pastEvents &&
+              pastEvents.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+          </div>
         </div>
       </div>
     </div>

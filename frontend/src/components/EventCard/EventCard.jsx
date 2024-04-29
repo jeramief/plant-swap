@@ -10,8 +10,6 @@ const EventCard = ({ event }) => {
     navigate(`/events/${eventId}`);
   };
 
-  console.log({ event });
-
   const dateAndTime = new Date(event.startDate).toLocaleString().split(", ");
   const date = dateAndTime[0];
   const time = `${dateAndTime[1]

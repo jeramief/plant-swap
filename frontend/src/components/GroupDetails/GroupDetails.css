@@ -1,1 +1,65 @@
-/* TEMPORARY IMAGE PLACEHOLDERS */
+/* MAIN */
+.group-details {
+  width: 100%;
+  padding: 0 15%;
+}
+/* MAIN */
+
+/* HERO */
+.group-details-hero {
+  display: flex;
+  height: 200px;
+  width: 100%;
+  gap: 5%;
+  margin-top: 30px;
+}
+.group-details-hero-image {
+  object-fit: contain;
+  overflow: hidden;
+  width: 20%;
+}
+.group-details-hero-image img {
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+}
+/* HERO */
+
+/* GROUP DETAILS MAIN */
+.group-details-wrapper {
+  width: 100%;
+  background: lightgrey;
+  padding: 5%;
+  border-radius: 50px;
+}
+/* GROUP DETAILS MAIN */
+
+/* EVENT LIST */
+.events-list {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.event-card {
+  background: rgb(160, 160, 160);
+  padding: 5%;
+  border-radius: 50px;
+}
+.event-card-main-details,
+.description {
+  display: flex;
+  width: 100%;
+  gap: 100px;
+  overflow: hidden;
+  border-radius: 10p;
+}
+.cart-image {
+  object-fit: contain;
+  width: 50%;
+}
+.cart-image img {
+  width: 100%;
+}
+/* EVENT LIST */
