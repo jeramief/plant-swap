@@ -34,7 +34,6 @@ export const getEventById = (eventId) => async (dispatch) => {
   if (response.ok) {
     const event = await response.json();
     dispatch(loadEvents([event]));
-    console.log("event from thunk", event);
   } else {
     const errors = await response.json();
     console.log(errors);

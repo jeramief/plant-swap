@@ -29,7 +29,7 @@ const DeleteGroupModal = ({ groupId }) => {
   };
 
   return (
-    <div style={{ background: "gray" }}>
+    <div className="delete-group-modal">
       <h2>Confirm Delete</h2>
       <p>Are you sure you want to remove this group?</p>
       <button style={{ background: "red" }} onClick={submitDelete}>

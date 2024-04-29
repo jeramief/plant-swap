@@ -1,0 +1,6 @@
+/* MAIN */
+.create-evetn-form-section > label {
+  display: flex;
+  flex-direction: column;
+}
+/* MAIN */

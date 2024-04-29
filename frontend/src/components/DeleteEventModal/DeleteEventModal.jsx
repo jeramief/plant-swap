@@ -29,7 +29,7 @@ const DeleteEventModal = ({ eventId, groupId }) => {
   };
 
   return (
-    <div>
+    <div className="delete-event-modal">
       <h2>Confirm Delete</h2>
       <p>Are you sure you want to remove this event?</p>
       <button style={{ background: "red" }} onClick={submitDelete}>

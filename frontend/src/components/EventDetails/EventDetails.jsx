@@ -36,7 +36,31 @@ const EventDetails = () => {
   const groupPreviewImage = Group?.GroupImages?.find(
     (group) => group.preview === true
   ).url;
-  console.log({ groupPreviewImage, previewImage });
+
+  // const startDateAndTime = new Date(event.startDate)
+  //   .toLocaleString()
+  //   .split(", ");
+  // const startDateConvert = startDateAndTime[0];
+  // const startTimeConvert = `${startDateAndTime[1]
+  //   .split(" ")
+  //   .slice(0, 1)
+  //   .join("")
+  //   .split("")
+  //   .reverse()
+  //   .slice(3)
+  //   .reverse()
+  //   .join("")} ${startDateAndTime[1].split(" ").slice(1).join("")}`;
+  // const endDateAndTime = new Date(event.startDate).toLocaleString().split(", ");
+  // const endDateConvert = endDateAndTime[0];
+  // const endTimeConvert = `${endDateAndTime[1]
+  //   .split(" ")
+  //   .slice(0, 1)
+  //   .join("")
+  //   .split("")
+  //   .reverse()
+  //   .slice(3)
+  //   .reverse()
+  //   .join("")} ${endDateAndTime[1].split(" ").slice(1).join("")}`;
 
   return (
     <div className="event-show">

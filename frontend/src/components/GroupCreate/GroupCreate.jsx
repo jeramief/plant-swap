@@ -89,6 +89,7 @@ const GroupCreate = () => {
           ? errors.location + " " + errors.state
           : errors.state;
       console.log("Group creation failed", errors);
+      setValidations(errors);
       setFormErrors(errors);
       return;
     }
@@ -109,16 +110,11 @@ const GroupCreate = () => {
 
   return (
     <div>
-      {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam voluptatum ab provident doloremque quasi, fugiat incidunt saepe cupiditate, voluptas nesciunt perferendis reiciendis nulla sapiente adipisci dolorum unde expedita dolor debitis, in impedit omnis ipsa? Nihil accusantium error id consectetur, modi aliquid perferendis reiciendis unde asperiores quisquam rerum aperiam vero tempora, perspiciatis reprehenderit explicabo. Illo, itaque. */}
-
       <form onSubmit={onSubmit}>
         <div className="form-section">
           <h1>Sart a New Group</h1>
-          {/* <h2>
-            We&apos;ll walk you through a few steps to build your local
-            community
-          </h2> */}
         </div>
+        <div className="breakline"></div>
         <div className="form-section">
           <h2>Set your group&apos;s location</h2>
           <p>
@@ -131,10 +127,11 @@ const GroupCreate = () => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
-          {submitted && validations.location && (
-            <p className="error">{validations.location}</p>
+          {submitted && validations?.location && (
+            <p className="error">{validations?.location}</p>
           )}
         </div>
+        <div className="breakline"></div>
         <div className="form-section">
           <h2>What will your group&apos;s name be?</h2>
           <p>
@@ -150,10 +147,11 @@ const GroupCreate = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {submitted && validations.name && (
-            <p className="error">{validations.name}</p>
+          {submitted && validations?.name && (
+            <p className="error">{validations?.name}</p>
           )}
         </div>
+        <div className="breakline"></div>
         <div className="form-section">
           <h2>Describe the purpose of your group.</h2>
           <p>
@@ -170,10 +168,11 @@ const GroupCreate = () => {
             value={about}
             onChange={(e) => setAbout(e.target.value)}
           />
-          {submitted && validations.about && (
-            <p className="error">{validations.about}</p>
+          {submitted && validations?.about && (
+            <p className="error">{validations?.about}</p>
           )}
         </div>
+        <div className="breakline"></div>
         <div className="form-section final-steps">
           <h2>Final steps...</h2>
 
@@ -186,8 +185,8 @@ const GroupCreate = () => {
               <option value="In person">In person</option>
               <option value="Online">Online</option>
             </select>
-            {submitted && validations.type && (
-              <p className="error">{validations.type}</p>
+            {submitted && validations?.type && (
+              <p className="error">{validations?.type}</p>
             )}
           </div>
 
@@ -203,8 +202,8 @@ const GroupCreate = () => {
               <option value="true">Private</option>
               <option value="false">Public</option>
             </select>
-            {submitted && validations.private && (
-              <p className="error">{validations.private}</p>
+            {submitted && validations?.private && (
+              <p className="error">{validations?.private}</p>
             )}
           </div>
 
@@ -215,10 +214,11 @@ const GroupCreate = () => {
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
-          {submitted && validations.imageUrl && (
-            <p className="error">{validations.imageUrl}</p>
+          {submitted && validations?.imageUrl && (
+            <p className="error">{validations?.imageUrl}</p>
           )}
         </div>
+        <div className="breakline"></div>
         <button>Create Group</button>
       </form>
     </div>

@@ -120,10 +120,10 @@ function CreateEvent() {
   }
 
   return (
-    <div className="create-event-page">
+    <div className="create-event-form">
       <h1>Create a new event for {group.name}</h1>
       <form onSubmit={onSubmit}>
-        <div className="form-section">
+        <div className="create-event-form-section">
           <label>
             What is the name of your event?
             <input
@@ -135,8 +135,8 @@ function CreateEvent() {
           </label>
           {errors.name && <p className="error">{errors.name}</p>}
         </div>
-
-        <div className="form-section">
+        <div className="breakline"></div>
+        <div className="create-event-form-section">
           <label>
             Is this an in-person or online event?
             <select
@@ -186,8 +186,8 @@ function CreateEvent() {
           </label>
           {errors.price && <p className="error">{errors.price}</p>}
         </div>
-
-        <div className="form-section">
+        <div className="breakline"></div>
+        <div className="create-event-form-section">
           <label>
             When does your event start?
             <input
@@ -210,8 +210,8 @@ function CreateEvent() {
           </label>
           {errors.endDate && <p className="error">{errors.endDate}</p>}
         </div>
-
-        <div className="form-section">
+        <div className="breakline"></div>
+        <div className="create-event-form-section">
           <label>
             Please add in image url for your event below:
             <input
@@ -223,16 +223,18 @@ function CreateEvent() {
           </label>
           {errors.url && <p className="error">{errors.url}</p>}
         </div>
+        <div className="create-evetn-form-section">
+          <label>
+            Please describe your event:
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Please include at least 30 characters"
+            />
+          </label>
+          {errors.description && <p className="error">{errors.description}</p>}
+        </div>
 
-        <label>
-          Please describe your event:
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Please include at least 30 characters"
-          />
-        </label>
-        {errors.description && <p className="error">{errors.description}</p>}
         <button type="submit">Create Event</button>
       </form>
     </div>

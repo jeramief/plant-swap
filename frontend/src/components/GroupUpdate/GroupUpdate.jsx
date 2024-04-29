@@ -56,7 +56,7 @@ const GroupUpdate = () => {
       errorsArray.push("Name is required");
       validationsObject.name = "Name is required";
     }
-    if (about.length < 50) {
+    if (about.length < 30) {
       errorsArray.push("Description must be at least 50 characters");
       validationsObject.about = "Descrition must be at least 50 characters";
     }

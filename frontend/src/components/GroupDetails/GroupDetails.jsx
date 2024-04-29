@@ -52,7 +52,11 @@ const GroupDetails = () => {
     navigate(`/groups/${groupId}/events/new`);
   };
   const updateGroup = () => {
-    navigate(`/groups/${groupId}/edit`);
+    if (Organizer?.id !== sessionUser?.id) {
+      navigate("/");
+    } else {
+      navigate(`/groups/${groupId}/edit`);
+    }
   };
   // console.log({ upcomingEvents });
 
